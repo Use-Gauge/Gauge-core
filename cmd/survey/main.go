@@ -17,8 +17,8 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
-	"strings"
 
+	"github.com/Use-Gauge/Gauge-core/pkg/census"
 	"github.com/Use-Gauge/Gauge-core/pkg/horizon"
 	"github.com/shopspring/decimal"
 )
@@ -290,43 +290,21 @@ func reportPositions(pools []horizon.Pool, positions []horizon.PoolShare) {
 	fmt.Printf("  positions per account: min %d  median %d  p99 %d  max %d\n",
 		held[0], held[len(held)/2], held[len(held)*99/100], held[len(held)-1])
 
-	// The share-supply reconciliation. For pools where every holder was
-	// captured, the holder balances must sum exactly to total_shares. Any
-	// discrepancy is either an incomplete holder list or an assumption of
-	// this project that is wrong, and both are findings.
-	index := map[string]horizon.Pool{}
-	for _, p := range pools {
-		index[p.ID] = p
+	// The share-supply reconciliation lives in pkg/census so it is tested
+	// against constructed cases — including a one-stroop shortfall and a supply
+	// too large for a float64 — rather than only against whatever the live
+	// network happened to return.
+	r := census.Reconcile(pools, positions)
+	fmt.Printf("  share reconciliation: %d/%d pools sum exactly to total_shares\n", r.Exact, r.Checked)
+	for i, m := range r.Mismatches {
+		if i >= 5 {
+			fmt.Printf("    ...and %d more\n", len(r.Mismatches)-5)
+			break
+		}
+		fmt.Printf("    mismatch %s: holders sum %s, total_shares %s, diff %s\n",
+			m.PoolID[:12], m.HolderSum, m.TotalShares, m.Difference)
 	}
-	var checked, exact int
-	var mismatches []string
-	for poolID, shares := range byPool {
-		p, ok := index[poolID]
-		if !ok {
-			continue
-		}
-		sum := decimal.Zero
-		for _, s := range shares {
-			sum = sum.Add(s.Shares)
-		}
-		// Only pools whose full holder set was fetched can reconcile. A pool
-		// discovered incidentally through another pool's holders has an
-		// arbitrary subset of its holders here.
-		if len(shares) != p.TotalTrustlines {
-			continue
-		}
-		checked++
-		if sum.Equal(p.TotalShares) {
-			exact++
-		} else if len(mismatches) < 5 {
-			mismatches = append(mismatches,
-				fmt.Sprintf("%s: holders sum %s, total_shares %s", poolID[:12], sum, p.TotalShares))
-		}
-	}
-	fmt.Printf("  share reconciliation: %d/%d pools sum exactly to total_shares\n", exact, checked)
-	for _, m := range mismatches {
-		fmt.Printf("    mismatch %s\n", m)
-	}
+
 	fmt.Println()
 }
 
@@ -343,5 +321,3 @@ func truncate(s string, n int) string {
 	}
 	return s[:n-1] + "…"
 }
-
-var _ = strings.TrimSpace
