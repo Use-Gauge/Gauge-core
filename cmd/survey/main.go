@@ -133,7 +133,7 @@ func reportHolders(pools []horizon.Pool) {
 		counts[len(counts)*99/100], counts[len(counts)-1])
 	fmt.Printf("  total trustlines across all pools: %d\n", total)
 	for _, n := range []int{1, 2, 3} {
-		fmt.Printf("  pools with exactly %d: %6d (%5.2f%%)\n", n, dist[n], pct(dist[n], len(pools)))
+		fmt.Printf("  pools with exactly %d: %6d (%5s%%)\n", n, dist[n], pct(dist[n], len(pools)))
 	}
 	for _, threshold := range []int{2, 5, 10, 100} {
 		c := 0
@@ -142,7 +142,7 @@ func reportHolders(pools []horizon.Pool) {
 				c++
 			}
 		}
-		fmt.Printf("  pools with >= %3d:  %6d (%5.2f%%)\n", threshold, c, pct(c, len(pools)))
+		fmt.Printf("  pools with >= %3d:  %6d (%5s%%)\n", threshold, c, pct(c, len(pools)))
 	}
 	fmt.Println()
 }
@@ -164,9 +164,9 @@ func reportEmptiness(pools []horizon.Pool) {
 			sharesButNoReserves++
 		}
 	}
-	fmt.Printf("  both reserves zero:            %6d (%5.2f%%)\n", drained, pct(drained, len(pools)))
-	fmt.Printf("  exactly one reserve zero:      %6d (%5.2f%%)\n", halfEmpty, pct(halfEmpty, len(pools)))
-	fmt.Printf("  zero total_shares:             %6d (%5.2f%%)\n", zeroShares, pct(zeroShares, len(pools)))
+	fmt.Printf("  both reserves zero:            %6d (%5s%%)\n", drained, pct(drained, len(pools)))
+	fmt.Printf("  exactly one reserve zero:      %6d (%5s%%)\n", halfEmpty, pct(halfEmpty, len(pools)))
+	fmt.Printf("  zero total_shares:             %6d (%5s%%)\n", zeroShares, pct(zeroShares, len(pools)))
 	fmt.Printf("  shares outstanding, no reserves: %4d  <- claims on nothing\n\n", sharesButNoReserves)
 }
 
@@ -186,7 +186,7 @@ func reportAssets(pools []horizon.Pool) {
 	}
 	fmt.Printf("  distinct assets: %d\n", len(assetPools))
 	fmt.Printf("  distinct pairs:  %d\n", len(pairs))
-	fmt.Printf("  pools with an XLM leg: %d (%.2f%%)\n", withNative, pct(withNative, len(pools)))
+	fmt.Printf("  pools with an XLM leg: %d (%s%%)\n", withNative, pct(withNative, len(pools)))
 
 	dupes := 0
 	for _, n := range pairs {
@@ -233,7 +233,7 @@ func reportActivity(pools []horizon.Pool) {
 				c++
 			}
 		}
-		fmt.Printf("  touched within ~%3dd: %6d (%5.2f%%)\n", days, c, pct(c, len(pools)))
+		fmt.Printf("  touched within ~%3dd: %6d (%5s%%)\n", days, c, pct(c, len(pools)))
 	}
 	fmt.Println()
 }
@@ -277,9 +277,9 @@ func reportPositions(pools []horizon.Pool, positions []horizon.PoolShare) {
 	}
 	fmt.Printf("  positions: %d\n", len(positions))
 	fmt.Printf("  distinct accounts: %d\n", len(accounts))
-	fmt.Printf("  distinct pools covered: %d of %d (%.2f%%)\n",
+	fmt.Printf("  distinct pools covered: %d of %d (%s%%)\n",
 		len(byPool), len(pools), pct(len(byPool), len(pools)))
-	fmt.Printf("  positions with a zero share balance: %d (%.2f%%)  <- trustline without a position\n",
+	fmt.Printf("  positions with a zero share balance: %d (%s%%)  <- trustline without a position\n",
 		zero, pct(zero, len(positions)))
 
 	held := make([]int, 0, len(accounts))
@@ -308,11 +308,26 @@ func reportPositions(pools []horizon.Pool, positions []horizon.PoolShare) {
 	fmt.Println()
 }
 
-func pct(n, total int) float64 {
+// pct renders n/total as a percentage string with two decimal places.
+//
+// It returns a string rather than a number, and computes in decimal rather than
+// float, because the no-floats CI job caught the float version and the right
+// response to that was to fix the code rather than to carve out an exemption.
+//
+// The exemption would have been defensible on its own terms — this is a
+// percentage of pool counts, not money, and it is only ever printed. But the
+// value of an absolute rule is that nobody has to adjudicate cases, and the
+// first exemption is what turns "no floats in the accounting path" into "no
+// floats except where someone argued otherwise". The conversion cost about
+// four lines.
+func pct(n, total int) string {
 	if total == 0 {
-		return 0
+		return "0.00"
 	}
-	return float64(n) * 100 / float64(total)
+	return decimal.NewFromInt(int64(n)).
+		Mul(decimal.NewFromInt(100)).
+		Div(decimal.NewFromInt(int64(total))).
+		StringFixed(2)
 }
 
 func truncate(s string, n int) string {
