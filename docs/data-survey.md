@@ -290,7 +290,7 @@ Phase 2 should establish before promising a realised P&L for anything.
 
 ## What surprised me
 
-Three things, in ascending order of how much they changed the plan.
+Four things, in ascending order of how much they changed the plan.
 
 ### The float ban stopped being a principle and became a measurement
 
@@ -326,6 +326,48 @@ ingestion path is not losing or duplicating anything, that Horizon's two views
 of a pool agree, and that decimal arithmetic holds end to end from wire format
 to run file. Had a single pool disagreed, every metric built on this data would
 have inherited the doubt.
+
+### Diversification has a hard ceiling, and it is the protocol, not preference
+
+The attribution pass reads accounts, not just pools, and the account population
+turns out to be sharply bimodal:
+
+| Positions held | Accounts | Share of accounts | Share of all positions |
+|---|---:|---:|---:|
+| exactly 1 | 10,097 | 66.97% | 13.79% |
+| 2–5 | 3,895 | 25.84% | 16.30% |
+| 6–20 | 671 | 4.45% | 9.12% |
+| 21–100 | 258 | 1.71% | 16.94% |
+| 101–500 | 155 | 1.03% | **43.86%** |
+| 501+ | **0** | 0.00% | 0.00% |
+
+Two thirds of liquidity providers hold exactly one position and account for
+one seventh of all positions. Meanwhile 155 accounts — one percent of the
+population — hold 44% of every position on the network, several hundred each.
+The top 100 accounts alone hold 34.02% of positions.
+
+The empty bucket is the interesting one. The most diversified account found
+holds 426 positions and nobody holds more than 500, which looked like a
+behavioural pattern until the accounts were checked directly:
+
+| Account | Pool positions | Other trustlines | `subentry_count` |
+|---|---:|---:|---:|
+| `GCSO6DAF…` | 426 | 144 | **999** |
+| `GB77C7CH…` | 420 | 133 | 995 |
+| `GCM3WX7Y…` | 410 | 179 | **999** |
+| `GDJEAORW…` | 409 | 169 | **1000** |
+
+A Stellar account may hold at most **1,000 subentries**, and a pool-share
+trustline costs two of them (the figures above track `2 × positions + other
+trustlines` closely). The most diversified liquidity providers on the network
+are not choosing to stop at four hundred pools. **They are full.** One of them
+has zero headroom remaining and cannot open another position without closing
+one.
+
+This is a structural constraint on the thing Gauge measures, and it is not
+visible from pool data at all. Diversification is the standard answer to
+position risk; on Stellar it has a hard, countable ceiling of roughly 500
+positions per account, and the accounts that matter most are already against it.
 
 ### The population worth measuring is about two hundred pools
 
