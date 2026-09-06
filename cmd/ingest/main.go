@@ -135,21 +135,35 @@ func run() error {
 }
 
 // gate is the attribution predicate, in words, for the manifest.
-const gate = "total_trustlines > 1 OR either reserve non-zero"
+const gate = "total_trustlines > 1"
 
 // attributable decides whether a pool is worth an attribution request.
 //
-// 86.1% of the pools in the 2026-09-05 sample had exactly one trustline, and a
-// single-holder pool holding nothing has no position worth measuring: the sole
-// holder owns 100% of nothing. Spending a request on each of those — against
-// the endpoint that already returns 503 under load — would multiply the run's
-// cost and its failure surface for rows that carry no information.
+// The first version of this gate — more than one trustline OR either reserve
+// non-zero — admitted 39,405 of the 39,833 pools in the census of 2026-09-06.
+// It was honest and it was useless: nearly every single-holder pool does hold
+// reserves, so the disjunction let almost the whole population through and the
+// run still cost one request per pool against the endpoint that returns 503
+// under load.
 //
-// A single-holder pool that does hold reserves is still attributed, because
-// "one account has an undiversified position of real size" is exactly the kind
-// of thing this project exists to measure.
+// The gate is now trustlines alone, on a stronger argument than cost. In a pool
+// with exactly one trustline the position is already fully determined by the
+// census: one account holds 100% of the shares, so its claim is the entire
+// reserve of both assets. Fetching the holder list adds the account's public
+// key and nothing else — no share balance that was not already implied, no
+// composition that was not already known. 34,402 pools (86.37%) are in that
+// state, and spending 34,402 requests on an unreliable endpoint to learn 34,402
+// account IDs is not a trade this census should make.
+//
+// Where there are two or more trustlines the split between holders is genuinely
+// unknown and cannot be derived from pool state at all. Those 5,431 pools are
+// the only ones where the request buys information.
+//
+// Single-holder pools are not abandoned: an account fetched for one pool
+// reports every pool it holds shares in, so many of them arrive anyway as a
+// side effect. The manifest records how many.
 func attributable(p horizon.Pool) bool {
-	return p.TotalTrustlines > 1 || !p.IsDrained()
+	return p.TotalTrustlines > 1
 }
 
 func attribute(
