@@ -42,6 +42,7 @@ func run() error {
 		maxPages   = flag.Int("max-pages", 0, "stop after N pages of pools (0 = the whole listing)")
 		holders    = flag.Bool("holders", false, "also attribute positions per pool (slow, one request per eligible pool)")
 		minNative  = flag.String("min-native", "0", "with -holders, only attribute pools holding at least this much XLM on a native leg")
+		trades     = flag.Int("trades", 0, "with -holders, also fetch N pages of recent trades per eligible pool for a price series (0 = off)")
 		verbose    = flag.Bool("v", false, "log every retry")
 	)
 	flag.Parse()
@@ -85,6 +86,11 @@ func run() error {
 	var eligible []string
 	var pools int
 
+	// The first reserve asset of each eligible pool. Trade prices are reported
+	// from the taker's side and must be normalised against a fixed direction,
+	// so the walk needs to know which asset the pool calls A.
+	poolAssetA := map[string]string{}
+
 	pages, requests, err := client.ListPools(ctx, *maxPages, func(page []horizon.Pool) error {
 		if err := w.WritePools(page); err != nil {
 			return err
@@ -99,6 +105,7 @@ func run() error {
 			}
 			if attributable(p, minNativeDec) {
 				eligible = append(eligible, p.ID)
+				poolAssetA[p.ID] = p.Reserves[0].Asset
 			}
 		}
 		if pools%2000 == 0 {
@@ -131,6 +138,18 @@ func run() error {
 				log.Error("writing manifest for a failed run", "err", cerr)
 			}
 			return fmt.Errorf("attribution: %w", herr)
+		}
+	}
+
+	if *trades > 0 {
+		stats, terr := fetchTrades(ctx, client, w, log, eligible, poolAssetA, *trades)
+		m.Trades = stats
+		if terr != nil {
+			m.FinishedAt = time.Now().UTC()
+			if cerr := w.Close(m); cerr != nil {
+				log.Error("writing manifest for a failed run", "err", cerr)
+			}
+			return fmt.Errorf("trades: %w", terr)
 		}
 	}
 
@@ -307,5 +326,75 @@ func attribute(
 		"positions", stats.Positions,
 		"accounts", stats.Accounts,
 		"requests", stats.Requests)
+	return stats, nil
+}
+
+// fetchTrades walks recent trades for each eligible pool, building the price
+// series that realised volatility and drawdown need.
+//
+// A census records one price per pool. One point has no variance and no
+// drawdown, so without this the two series metrics are implemented and
+// unusable. The walk is bounded per pool because the largest pool produces over
+// a thousand trades a day and an exhaustive history is not something a run can
+// finish; the manifest records the bound and the window actually observed, since
+// a volatility figure without its window is not a measurement.
+func fetchTrades(
+	ctx context.Context,
+	client *horizon.Client,
+	w *census.Writer,
+	log *slog.Logger,
+	eligible []string,
+	assetA map[string]string,
+	maxPages int,
+) (*census.TradeStats, error) {
+	stats := &census.TradeStats{MaxPages: maxPages, PoolsFailed: []string{}}
+
+	log.Info("trade history starting", "pools", len(eligible), "max_pages_per_pool", maxPages)
+
+	for i, poolID := range eligible {
+		if ctx.Err() != nil {
+			log.Warn("trade history interrupted", "completed", i, "remaining", len(eligible)-i)
+			stats.PoolsFailed = append(stats.PoolsFailed, eligible[i:]...)
+			return stats, nil
+		}
+
+		got, reqs, err := client.PoolTrades(ctx, poolID, assetA[poolID], maxPages)
+		stats.Requests += reqs
+		if err != nil {
+			log.Warn("no trade history", "pool", poolID, "err", err)
+			stats.PoolsFailed = append(stats.PoolsFailed, poolID)
+			continue
+		}
+		if len(got) == 0 {
+			// A pool with no trades is not a failure. It is a pool nobody has
+			// swapped against, which for this population is common and is
+			// itself worth being able to see.
+			continue
+		}
+		if err := w.WriteTrades(got); err != nil {
+			return stats, err
+		}
+		stats.Pools++
+		stats.Trades += len(got)
+
+		for _, t := range got {
+			if stats.Earliest == "" || t.CloseTime < stats.Earliest {
+				stats.Earliest = t.CloseTime
+			}
+			if t.CloseTime > stats.Latest {
+				stats.Latest = t.CloseTime
+			}
+		}
+
+		if (i+1)%50 == 0 {
+			log.Info("trade history progress", "pools", i+1, "of", len(eligible), "trades", stats.Trades)
+		}
+	}
+
+	log.Info("trade history complete",
+		"pools_with_trades", stats.Pools,
+		"trades", stats.Trades,
+		"requests", stats.Requests,
+		"window", stats.Earliest+" .. "+stats.Latest)
 	return stats, nil
 }

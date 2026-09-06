@@ -17,6 +17,7 @@ from .concentration import holder_hhi, top_holder_share
 from .exact import ZERO, quantise
 from .position import claim, net_pnl
 from .run import Run, load
+from .series import max_drawdown, realised_volatility
 
 # Horizon's retention boundary on horizon.stellar.org, observed 2026-09-06.
 # A position that last changed before this has no recoverable entry basis.
@@ -102,12 +103,26 @@ def main(argv: list[str] | None = None) -> int:
         f"before\n          ledger {HISTORY_ELDER_LEDGER:,}; those show '-' for "
         "IL, fee yield and P&L."
     )
+    tstats = run.manifest.get("trades")
+    if tstats:
+        print(
+            f"prices:   {tstats['trades']:,} trades across {tstats['pools']:,} pools, "
+            f"{tstats['earliest_close_time']} .. {tstats['latest_close_time']}\n"
+            "          vol is unannualised stdev of log returns over that window; "
+            "maxDD is\n          peak-to-trough over the same."
+        )
+    else:
+        print(
+            "prices:   no trade history in this run, so vol and maxDD are '-'. "
+            "A census\n          gives one price per pool, and one point has no "
+            "variance. Re-run\n          ingest with -trades N."
+        )
     print()
 
     header = (
         f"{'account':<11} {'pool':<11} {'pair':<18} {'share%':>9} "
         f"{'claim A':>16} {'claim B':>16} {'HHI':>7} {'top%':>7} "
-        f"{'IL':>9} {'feeYld':>9} {'net%':>9}"
+        f"{'IL':>9} {'feeYld':>9} {'net%':>9} {'vol':>8} {'maxDD':>9}"
     )
     print(header)
     print("-" * len(header))
@@ -120,6 +135,13 @@ def main(argv: list[str] | None = None) -> int:
         if pool is None or pool.is_drained:
             continue
         positions = by_pool[pool_id]
+
+        # Series metrics are per-pool, not per-position: every holder of a pool
+        # experiences the same price path. Computed once here rather than per
+        # row, which also keeps the table honest about what varies.
+        series = run.price_series_for(pool_id)
+        vol = realised_volatility(series)
+        dd = max_drawdown(series).max_drawdown
 
         # HHI needs the complete holder set. It is complete only when the number
         # of positions found equals the pool's trustline count.
@@ -161,7 +183,8 @@ def main(argv: list[str] | None = None) -> int:
                 f"{fmt(hhi, 4):>7} {fmt(top, 4):>7} "
                 f"{fmt(pnl.impermanent_loss if pnl else None, 2, pct=True):>9} "
                 f"{fmt(pnl.fee_yield if pnl else None, 2, pct=True):>9} "
-                f"{fmt(pnl.net_fraction if pnl else None, 2, pct=True):>9}"
+                f"{fmt(pnl.net_fraction if pnl else None, 2, pct=True):>9} "
+                f"{fmt(vol, 4):>8} {fmt(dd, 2, pct=True):>9}"
             )
             rows += 1
             if args.limit and rows >= args.limit:

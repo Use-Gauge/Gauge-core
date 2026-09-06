@@ -59,6 +59,9 @@ type Manifest struct {
 
 	// Holders records the attribution pass. Nil when it did not run.
 	Holders *HolderStats `json:"holders,omitempty"`
+
+	// Trades records the price-history pass. Nil when it did not run.
+	Trades *TradeStats `json:"trades,omitempty"`
 }
 
 // HolderStats describes the position-attribution pass.
@@ -96,6 +99,23 @@ type HolderStats struct {
 	PoolsReread int `json:"pools_reread"`
 }
 
+// TradeStats describes the price-history pass.
+type TradeStats struct {
+	// MaxPages bounds each pool's walk. Recorded because it determines how far
+	// back the series reaches, and a volatility figure means nothing without
+	// knowing the window it covers.
+	MaxPages int `json:"max_pages_per_pool"`
+
+	Pools       int      `json:"pools"`
+	Trades      int      `json:"trades"`
+	Requests    int      `json:"requests"`
+	PoolsFailed []string `json:"pools_failed"`
+
+	// Earliest and Latest bound the observed window across all pools.
+	Earliest string `json:"earliest_close_time"`
+	Latest   string `json:"latest_close_time"`
+}
+
 // Writer accumulates a run in a directory.
 type Writer struct {
 	dir      string
@@ -105,6 +125,8 @@ type Writer struct {
 	postsEnc *json.Encoder
 	atAttr   *os.File
 	atAttrEn *json.Encoder
+	trades   *os.File
+	tradesEn *json.Encoder
 }
 
 // NewWriter creates the run directory and opens its files.
@@ -177,6 +199,27 @@ func (w *Writer) WritePoolsAtAttribution(pools []horizon.Pool) error {
 	return nil
 }
 
+// WriteTrades appends price observations to trades.jsonl.
+//
+// A census gives one price per pool — a single point, from which no variance
+// and no drawdown can be computed. Trades are where the series comes from.
+func (w *Writer) WriteTrades(trades []horizon.Trade) error {
+	if w.trades == nil {
+		f, err := os.Create(filepath.Join(w.dir, "trades.jsonl"))
+		if err != nil {
+			return fmt.Errorf("census: create trades.jsonl: %w", err)
+		}
+		w.trades = f
+		w.tradesEn = json.NewEncoder(f)
+	}
+	for _, t := range trades {
+		if err := w.tradesEn.Encode(t); err != nil {
+			return fmt.Errorf("census: write trade %s: %w", t.ID, err)
+		}
+	}
+	return nil
+}
+
 // Close writes the manifest and closes the run's files. A run directory without
 // manifest.json is an interrupted run, and downstream readers should treat it
 // as such.
@@ -196,6 +239,11 @@ func (w *Writer) Close(m Manifest) error {
 			return fmt.Errorf("census: close pools_at_attribution.jsonl: %w", err)
 		}
 	}
+	if w.trades != nil {
+		if err := w.trades.Close(); err != nil {
+			return fmt.Errorf("census: close trades.jsonl: %w", err)
+		}
+	}
 
 	m.DurationS = int64(m.FinishedAt.Sub(m.StartedAt) / time.Second)
 
@@ -204,6 +252,9 @@ func (w *Writer) Close(m Manifest) error {
 	// nothing failed"; null says nothing at all.
 	if m.Holders != nil && m.Holders.PoolsFailed == nil {
 		m.Holders.PoolsFailed = []string{}
+	}
+	if m.Trades != nil && m.Trades.PoolsFailed == nil {
+		m.Trades.PoolsFailed = []string{}
 	}
 
 	b, err := json.MarshalIndent(m, "", "  ")

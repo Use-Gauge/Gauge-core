@@ -33,6 +33,16 @@ class Pool:
 
 
 @dataclass(frozen=True)
+class Trade:
+    """One price observation, normalised to the pool's A-in-B direction."""
+
+    pool_id: str
+    id: str
+    close_time: str
+    price_a_in_b: Decimal
+
+
+@dataclass(frozen=True)
 class Position:
     account_id: str
     pool_id: str
@@ -67,6 +77,21 @@ class Run:
     # `pools` for any share-of-pool arithmetic: the census row may be hours
     # older, and on the run of 2026-09-06 five pools moved in between.
     pools_at_attribution: dict[str, Pool]
+    # Price observations per pool, oldest first. Empty when the run did no
+    # trade pass; a pool absent from this map has no series, which is different
+    # from having a flat one.
+    trades: dict[str, list[Trade]]
+
+    def price_series_for(self, pool_id: str) -> list[Decimal]:
+        """Prices for a pool, oldest first.
+
+        Ordered by close time rather than by the order Horizon returned them:
+        the trade walk fetches newest-first and pages backwards, so the raw file
+        is in descending time. Feeding that to a drawdown calculation would
+        measure the series running backwards, which reports the recovery as the
+        decline.
+        """
+        return [t.price_a_in_b for t in self.trades.get(pool_id, [])]
 
     def pool_for(self, pool_id: str) -> Pool | None:
         """The most contemporaneous pool state available for a position."""
@@ -121,4 +146,23 @@ def load(directory: str | Path) -> Run:
                     )
                 )
 
-    return Run(d, manifest, pools, positions, at_attr)
+    trades: dict[str, list[Trade]] = {}
+    trades_path = d / "trades.jsonl"
+    if trades_path.exists():
+        for line in trades_path.read_text().splitlines():
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            trades.setdefault(row["pool_id"], []).append(
+                Trade(
+                    pool_id=row["pool_id"],
+                    id=row["id"],
+                    close_time=row["close_time"],
+                    price_a_in_b=dec(row["price_a_in_b"]),
+                )
+            )
+    # Oldest first. See price_series_for.
+    for series in trades.values():
+        series.sort(key=lambda t: t.close_time)
+
+    return Run(d, manifest, pools, positions, at_attr, trades)
