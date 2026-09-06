@@ -2,9 +2,9 @@ GO      ?= go
 BIN     := bin
 PKGS    := ./...
 
-.PHONY: all build test race vet fmt cover census clean help
+.PHONY: all build test race vet fmt cover census metrics py-test py-lint clean help
 
-all: fmt vet test build ## Format, vet, test and build
+all: fmt vet test build py-lint py-test ## Everything CI runs
 
 build: ## Build all binaries into bin/
 	@mkdir -p $(BIN)
@@ -29,6 +29,16 @@ cover: ## Run tests with coverage and write coverage.html
 
 census: ## Ingest the full pool census from live mainnet Horizon
 	$(GO) run ./cmd/ingest -out data/runs
+
+metrics: ## Print the metrics table for a run (make metrics RUN=data/runs/...)
+	@test -n "$(RUN)" || { echo "usage: make metrics RUN=data/runs/<run>"; exit 2; }
+	cd pkg/metrics && python3 -m gauge_metrics $(CURDIR)/$(RUN)
+
+py-test: ## Run the metrics layer test suite
+	cd pkg/metrics && python3 -m pytest -q
+
+py-lint: ## Lint and format-check the metrics layer
+	cd pkg/metrics && python3 -m ruff check . && python3 -m ruff format --check .
 
 clean: ## Remove build and coverage artifacts
 	rm -rf $(BIN) coverage.out coverage.html

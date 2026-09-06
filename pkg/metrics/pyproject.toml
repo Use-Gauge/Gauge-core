@@ -1,0 +1,54 @@
+[project]
+name = "gauge-metrics"
+version = "0.1.0"
+description = "Deterministic risk metrics for Stellar liquidity positions"
+requires-python = ">=3.11"
+
+# No runtime dependencies, and that is a decision rather than an oversight.
+#
+# The brief allowed Polars, NumPy, SciPy and statsmodels. None of them is used,
+# because none of them earned a place:
+#
+#   * The accounting path is decimal.Decimal from end to end. Polars and NumPy
+#     compute in float64, so every value crossing into a dataframe would have to
+#     come back out again, and the census measured that 3.86% of Gauge's values
+#     do not survive that trip. A dataframe here would be a float-shaped hole in
+#     the middle of the one invariant this project has.
+#   * The volumes do not need it. The largest run is 73,830 positions across
+#     39,833 pools. Plain Python reads and reduces that in seconds.
+#   * The statistical layer is currently one function — the standard deviation
+#     of log returns — which is six lines of `math`. Importing NumPy to avoid
+#     writing them would add a dependency to save nothing.
+#
+# When a later baseline genuinely needs one of these, it gets added then, with
+# the reason recorded. Until then the metrics layer has no third-party runtime
+# dependency at all.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "ruff>=0.4", "black>=24"]
+
+[project.scripts]
+gauge-metrics = "gauge_metrics.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["gauge_metrics*"]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
