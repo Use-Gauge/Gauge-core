@@ -271,12 +271,38 @@ metrics layer, where the threshold is visible and testable rather than buried in
 a fetch. `price_series_for(drop_dust=False)` still returns the raw series and
 `dust_count` reports what was removed, so the filter can always be audited.
 
-The threshold is the floor itself, not a round number above it. Excluding a
-genuinely small but well-formed trade would be discarding real data to tidy a
-chart; what is excluded is only the range where the rational cannot express a
-price. A trade with no recorded amounts — from runs made before amounts were
-carried — is not treated as dust, because absent information must not
-masquerade as a judgement. All three cases are tested.
+**The threshold is set by precision, not by size**, and the first attempt got it
+wrong. Excluding trades at or below ten stroops caught the degenerate `1/1` and
+`2/1` cases and let a whole family through: twelve stroops against thirteen
+reports `13/12` = 1.0833…, which looks like a plausible price and is only the
+finest thing a twelve-stroop trade can say.
+
+The rule now follows from the quantisation directly: a swap of N stroops reports
+a rational granular at 1/N, so 100 stroops bounds the relative error at 1% —
+finer than any move these metrics are meant to detect. That is 1e-5 XLM, a few
+millionths of a cent, so nothing with economic content is excluded; what is
+excluded is only the range where the ledger's resolution prevents a price from
+being stated. A trade with no recorded amounts — from runs made before amounts
+were carried — is not treated as dust, because absent information must not
+masquerade as a judgement. All of these cases are tested.
+
+### How much it mattered
+
+Over 113,893 trades from 205 in-scope pools:
+
+| | |
+|---|---:|
+| Excluded as unpriceable | 4,699 (4.13%) |
+| Pools containing at least one | 51 of 205 (24.9%) |
+| Pools whose drawdown moved by over a point | 19 |
+| Worst drawdown, raw → filtered | −99.98% → **−74.76%** |
+| Highest volatility, raw → filtered | 0.4655 → **0.0959** |
+| Median drawdown, raw → filtered | −3.12% → −2.65% |
+| Median volatility, raw → filtered | 0.00238 → 0.00231 |
+
+The worst drawdown was overstated by a factor of 15 and the highest volatility
+by 5, while the medians barely moved. That is the shape of the hazard: the
+aggregate looked reasonable throughout, and only individual pools were wrong.
 
 ---
 

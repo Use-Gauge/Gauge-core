@@ -300,6 +300,49 @@ three consecutive 503s, then a 200. The client retries; the manifest enumerates
 every pool that could not be fetched after retries, by ID, so a census with
 holes has labelled holes.
 
+**Trade prices below the ledger's resolution are not prices, and a quarter of
+pools have them.** Found during Phase 2, recorded here because it is a property
+of the data as ingested rather than of any metric.
+
+Stellar stores amounts as integers of 1e-7. A swap of N stroops against M
+stroops reports the rational M/N, whose relative granularity is 1/N — so the
+smaller the trade, the coarser the price it can express, regardless of what the
+pool is worth. At one stroop the rational degenerates completely: one stroop for
+one stroop reports exactly 1.
+
+Measured over 113,893 trades from the 205 in-scope pools with trade history:
+
+| | |
+|---|---:|
+| Trades too coarse to state a price (either side <= 100 stroops) | **4,699 (4.13%)** |
+| Pools containing at least one | **51 of 205 (24.9%)** |
+| Pools whose drawdown moves by more than a point once excluded | 19 |
+
+The distortion is not proportional to the count, because drawdown is a max over
+the series and one bad observation is enough:
+
+| Pool | Dust trades | maxDD raw | maxDD filtered | vol raw | vol filtered |
+|---|---:|---:|---:|---:|---:|
+| `2aabd51b…` (XLM/LUSD) | 6 | **-99.98%** | -6.64% | 0.4655 | 0.0035 |
+| `e2a9f591…` (XLM/yXLM) | 392 | **-50.00%** | -0.98% | 0.1947 | 0.0022 |
+| `961aa6a2…` | 180 | -46.86% | -2.22% | 0.0419 | 0.0029 |
+| `f41da6dd…` | 1 | -38.01% | -2.35% | 0.0277 | 0.0022 |
+
+Across the population the worst drawdown was overstated by a factor of 15
+(-99.98% against -74.76%) and the highest volatility by a factor of 5 (0.4655
+against 0.0959). The medians barely moved (-3.12% to -2.65%, 0.00238 to
+0.00231), which is exactly why this was easy to miss: the aggregate looked
+reasonable while individual pools were nonsense.
+
+XLM/yXLM is the clearest case. Its true reserve ratio is about 1.003 and its
+series is dominated by 1 (168 times), 2 (128 times), 9/8, 13/12, 3/2 and 4/3 —
+small-integer rationals, which is what a few-stroop swap can express and nothing
+else. A single one of these, in XLM/LUSD, produced the -99.98%.
+
+Ingestion records these trades unchanged; the exclusion happens in the metrics
+layer, where the threshold is visible and the raw series stays reachable.
+
+
 **Horizon has already forgotten a year-old ledger, and this is measurable.**
 This started as an open question in an earlier draft and turned out to be cheap
 to answer: Horizon reports its own retention boundary at the root endpoint. As
