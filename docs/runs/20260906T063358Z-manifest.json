@@ -1,0 +1,13 @@
+{
+  "tool": "cmd/ingest",
+  "horizon_url": "https://horizon.stellar.org",
+  "started_at": "2026-09-06T06:33:58.994256995Z",
+  "finished_at": "2026-09-06T06:35:02.310394476Z",
+  "duration_seconds": 63,
+  "pools": 39833,
+  "pages": 200,
+  "requests": 201,
+  "max_pages": 0,
+  "ledger_high": 64296875,
+  "ledger_low": 38115941
+}

@@ -1,0 +1,26 @@
+{
+  "tool": "cmd/ingest",
+  "horizon_url": "https://horizon.stellar.org",
+  "started_at": "2026-09-06T06:37:25.082895919Z",
+  "finished_at": "2026-09-06T13:29:53.652689065Z",
+  "duration_seconds": 24748,
+  "pools": 39833,
+  "pages": 200,
+  "requests": 201,
+  "max_pages": 0,
+  "ledger_high": 64296913,
+  "ledger_low": 38115941,
+  "holders": {
+    "gate": "total_trustlines \u003e 1",
+    "pools_eligible": 5431,
+    "pools_attributed": 5429,
+    "pools_skipped": 34402,
+    "pools_failed": [
+      "0ddc5679cec34332fccab4c0c0a3b28dcdd00fe11fbd4a65ad3ba457b37b2ec7",
+      "7bb2a4d6cfa5079d42e8363937a476bdbfad37b933b6b58047af6fb2ee96764f"
+    ],
+    "positions": 73830,
+    "accounts": 15559,
+    "requests": 11036
+  }
+}
