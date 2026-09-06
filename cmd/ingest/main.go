@@ -22,6 +22,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/shopspring/decimal"
+
 	"github.com/Use-Gauge/Gauge-core/pkg/census"
 	"github.com/Use-Gauge/Gauge-core/pkg/horizon"
 )
@@ -39,6 +41,7 @@ func run() error {
 		out        = flag.String("out", "data/runs", "parent directory for the run")
 		maxPages   = flag.Int("max-pages", 0, "stop after N pages of pools (0 = the whole listing)")
 		holders    = flag.Bool("holders", false, "also attribute positions per pool (slow, one request per eligible pool)")
+		minNative  = flag.String("min-native", "0", "with -holders, only attribute pools holding at least this much XLM on a native leg")
 		verbose    = flag.Bool("v", false, "log every retry")
 	)
 	flag.Parse()
@@ -54,6 +57,11 @@ func run() error {
 	// that says how partial it is remains useful.
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
+
+	minNativeDec, err := decimal.NewFromString(*minNative)
+	if err != nil {
+		return fmt.Errorf("-min-native %q is not a decimal: %w", *minNative, err)
+	}
 
 	started := time.Now().UTC()
 	dir := filepath.Join(*out, started.Format("20060102T150405Z"))
@@ -89,7 +97,7 @@ func run() error {
 			if m.LedgerLow == 0 || p.LastModifiedLedger < m.LedgerLow {
 				m.LedgerLow = p.LastModifiedLedger
 			}
-			if attributable(p) {
+			if attributable(p, minNativeDec) {
 				eligible = append(eligible, p.ID)
 			}
 		}
@@ -115,7 +123,7 @@ func run() error {
 		"eligible_for_attribution", len(eligible))
 
 	if *holders {
-		stats, herr := attribute(ctx, client, w, log, eligible, pools)
+		stats, herr := attribute(ctx, client, w, log, eligible, pools, gateDescription(minNativeDec))
 		m.Holders = stats
 		if herr != nil {
 			m.FinishedAt = time.Now().UTC()
@@ -134,8 +142,17 @@ func run() error {
 	return nil
 }
 
-// gate is the attribution predicate, in words, for the manifest.
-const gate = "total_trustlines > 1"
+// gate describes the attribution predicate in words, for the manifest.
+//
+// A reader must be able to see what a run skipped without reading the code that
+// skipped it, so the threshold is interpolated rather than described in the
+// abstract.
+func gateDescription(minNative decimal.Decimal) string {
+	if minNative.IsZero() {
+		return "total_trustlines > 1"
+	}
+	return "total_trustlines > 1 AND a native leg holding at least " + minNative.String() + " XLM"
+}
 
 // attributable decides whether a pool is worth an attribution request.
 //
@@ -162,8 +179,28 @@ const gate = "total_trustlines > 1"
 // Single-holder pools are not abandoned: an account fetched for one pool
 // reports every pool it holds shares in, so many of them arrive anyway as a
 // side effect. The manifest records how many.
-func attributable(p horizon.Pool) bool {
-	return p.TotalTrustlines > 1
+func attributable(p horizon.Pool, minNative decimal.Decimal) bool {
+	if p.TotalTrustlines <= 1 {
+		return false
+	}
+	if minNative.IsZero() {
+		return true
+	}
+	// The survey's in-scope filter, available as a flag because a full
+	// attribution pass takes about seven hours and the population it is really
+	// after is 208 pools. Restricting to those is minutes.
+	//
+	// XLM is the only denominator the ledger offers for cross-pool comparison,
+	// so a pool without a native leg cannot pass a value threshold at all and
+	// is excluded. That is a real limit of the filter, not a property of the
+	// pools: a pool holding substantial value in two assets Gauge cannot price
+	// is invisible here, which is why the survey calls 208 a floor.
+	for _, r := range p.Reserves {
+		if r.IsNative() && r.Amount.GreaterThanOrEqual(minNative) {
+			return true
+		}
+	}
+	return false
 }
 
 func attribute(
@@ -173,6 +210,7 @@ func attribute(
 	log *slog.Logger,
 	eligible []string,
 	totalPools int,
+	gate string,
 ) (*census.HolderStats, error) {
 	stats := &census.HolderStats{
 		Gate:          gate,

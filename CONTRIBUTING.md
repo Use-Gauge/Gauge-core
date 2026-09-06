@@ -7,16 +7,24 @@ wanted and, more unusually, what contributions are not.
 
 ## Getting set up
 
-You need Go 1.22 or newer. Nothing else yet; the Python metrics layer does not
-exist at the time of writing, and this file will grow a section when it does.
+You need Go 1.22 or newer for ingestion, and Python 3.11 or newer for the
+metrics layer.
 
 ```sh
-make build   # binaries into bin/
-make test    # the suite
-make race    # the suite under the race detector, as CI runs it
-make vet     # go vet
-make fmt     # gofmt
+make build     # binaries into bin/
+make test      # the Go suite
+make race      # the Go suite under the race detector, as CI runs it
+make vet       # go vet
+make fmt       # gofmt
+make py-test   # the metrics layer suite
+make py-lint   # ruff check and format check
+make all       # everything CI runs
 ```
+
+The metrics layer has **no third-party runtime dependencies**. Polars, NumPy,
+SciPy and statsmodels were all considered and none is used — see the comment in
+[`pkg/metrics/pyproject.toml`](pkg/metrics/pyproject.toml) for why. Adding one
+means making that case.
 
 ## What is maintainer-owned
 
@@ -57,11 +65,29 @@ so the boundary is a stated policy rather than a reaction to a specific PR.
 ## Two hard rules
 
 **Exact arithmetic in the accounting path.** Every monetary value, reserve,
-share balance and position figure is `decimal.Decimal` (Go: `shopspring/decimal`)
-from the first line of ingestion. Floats are permitted only inside the eventual
-statistical layer, and never where a number is presented as money. A PR
-introducing `float64` into `pkg/horizon`, `cmd/ingest`, or any accounting path
-will be declined on sight.
+share balance and position figure is `decimal.Decimal` (Go: `shopspring/decimal`;
+Python: the stdlib `decimal`) from the first line of ingestion. This is not a
+stylistic preference: the census of 2026-09-06 measured that **4,610 of 119,499
+monetary values (3.86%) do not survive a `float64` round trip**.
+
+The rule has exactly one exemption, and it is named rather than described:
+[`pkg/metrics/gauge_metrics/series.py`](pkg/metrics/gauge_metrics/series.py),
+the statistical layer, where a logarithm has no exact decimal form and the input
+is already a sample. Everything else is exact, including drawdown — it is a
+ratio of two observed values and needs no transcendental function, so it does
+not get a float.
+
+Two CI jobs enforce this: a grep over Go's `pkg/` and `cmd/`, and a grep over the
+Python package that treats `series.py` as the sole exception. `exact.dec()`
+raises `TypeError` on a float rather than accepting a value whose precision is
+already gone.
+
+The rule has no other exemptions, and the reason is on the record. When the
+no-floats job first fired it caught the maintainer's own display-percentage
+helper in `cmd/survey`. The exemption would have been defensible — percentages
+of pool counts, never money, only ever printed — and it was not taken, because
+the first exemption is what turns "no floats in the accounting path" into "no
+floats except where someone argued otherwise".
 
 **No fabricated data, ever.** No synthetic positions, no illustrative figures, no
 plausible-looking example numbers in documentation. Every figure in this

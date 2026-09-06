@@ -48,19 +48,37 @@ make help    # all targets
 ## Reproducing the survey
 
 ```sh
-./bin/ingest -out data/runs            # the pool census: ~200 requests, ~60s
-./bin/ingest -out data/runs -holders   # plus position attribution: slow
-./bin/survey data/runs/<run>           # the figures in docs/data-survey.md
+./bin/ingest -out data/runs                          # pool census: ~200 requests, ~60s
+./bin/ingest -out data/runs -holders                 # full attribution: ~7 hours
+./bin/ingest -out data/runs -holders -min-native 1000  # in-scope only: minutes
+./bin/survey data/runs/<run>                         # the figures in the survey
 ```
 
 Ingested runs are not committed by default — they are large and reproducible
-from the commands above.
+from the commands above. The manifests are, under [docs/runs/](docs/runs/).
+
+## Metrics
+
+```sh
+make metrics RUN=data/runs/<run>
+```
+
+Impermanent loss, concentration, fee yield, drawdown, realised volatility and
+net P&L — each written out longhand in [pkg/metrics/](pkg/metrics/) with its
+derivation, and verified against independently-known cases in
+[docs/metrics-verification.md](docs/metrics-verification.md).
+
+Quantities the ledger cannot support are printed as `-`, never estimated. That
+is most of them: Horizon retains 365 days of history and **81.91% of in-scope
+positions last moved before that boundary**, so their entry basis is
+unrecoverable and their P&L is genuinely unknowable rather than zero.
 
 ## Documentation
 
 | Document | What it is |
 |---|---|
 | [docs/data-survey.md](docs/data-survey.md) | What is actually in the data. The document everything else rests on |
+| [docs/metrics-verification.md](docs/metrics-verification.md) | Every formula, checked against a case whose answer exists independently |
 | [docs/positioning.md](docs/positioning.md) | What Gauge measures that adjacent projects do not, with the evidence |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to contribute, and what is maintainer-owned |
 
