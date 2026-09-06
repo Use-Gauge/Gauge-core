@@ -188,6 +188,15 @@ func attribute(
 	// twice from two different pools' holder lists.
 	seenAccount := make(map[string]bool)
 
+	// The pool row is re-read alongside its holders and written to
+	// pools_at_attribution.jsonl. The census pass recorded these pools up to
+	// several hours earlier, and on the run of 2026-09-06 five of them had
+	// taken a deposit in between — their holder balances summed to more than
+	// the total_shares on record. Both reads were correct; they described
+	// different instants. A position's denominator has to come from the same
+	// moment as its numerator, so it is fetched at that moment.
+	var reread int
+
 	log.Info("attribution starting", "eligible", len(eligible), "skipped", stats.PoolsSkipped, "gate", gate)
 
 	for i, poolID := range eligible {
@@ -198,6 +207,21 @@ func attribute(
 			// one.
 			stats.PoolsFailed = append(stats.PoolsFailed, eligible[i:]...)
 			return stats, nil
+		}
+
+		// Fetched before the holder list rather than after, so that any
+		// deposit landing mid-pool-walk shows up as holders exceeding shares
+		// — a direction the reconciliation already knows how to read — rather
+		// than the reverse, which would look like missing holders.
+		p, preqs, perr := client.Pool(ctx, poolID)
+		stats.Requests += preqs
+		if perr == nil {
+			if werr := w.WritePoolsAtAttribution([]horizon.Pool{p}); werr != nil {
+				return stats, werr
+			}
+			reread++
+		} else {
+			log.Warn("pool state not re-read at attribution time", "pool", poolID, "err", perr)
 		}
 
 		accounts, reqs, err := client.PoolHolders(ctx, poolID)
@@ -236,8 +260,11 @@ func attribute(
 		}
 	}
 
+	stats.PoolsReread = reread
+
 	log.Info("attribution complete",
 		"attributed", stats.PoolsAttributed,
+		"reread", reread,
 		"failed", len(stats.PoolsFailed),
 		"positions", stats.Positions,
 		"accounts", stats.Accounts,

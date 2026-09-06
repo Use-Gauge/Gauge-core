@@ -82,6 +82,18 @@ type HolderStats struct {
 	Positions int `json:"positions"`
 	Accounts  int `json:"accounts"`
 	Requests  int `json:"requests"`
+
+	// PoolsReread counts pools whose state was re-read at the moment their
+	// holders were fetched, into pools_at_attribution.jsonl.
+	//
+	// A census assembled over hours is not a snapshot: the run of 2026-09-06
+	// read pool rows in its first minute and some holder lists 412 minutes
+	// later, and five pools moved in between. Reconciliation and any
+	// share-of-pool arithmetic must use the contemporaneous row, not the
+	// census row. Where this is lower than PoolsAttributed, the difference is
+	// pools whose re-read failed and which therefore only have census-era
+	// state.
+	PoolsReread int `json:"pools_reread"`
 }
 
 // Writer accumulates a run in a directory.
@@ -91,6 +103,8 @@ type Writer struct {
 	poolsEnc *json.Encoder
 	posts    *os.File
 	postsEnc *json.Encoder
+	atAttr   *os.File
+	atAttrEn *json.Encoder
 }
 
 // NewWriter creates the run directory and opens its files.
@@ -139,6 +153,30 @@ func (w *Writer) WritePositions(shares []horizon.PoolShare) error {
 	return nil
 }
 
+// WritePoolsAtAttribution appends pool state as read at attribution time to
+// pools_at_attribution.jsonl.
+//
+// Kept in a separate file from pools.jsonl rather than overwriting it, because
+// the two are different measurements and the gap between them is itself data:
+// comparing the files shows exactly which pools moved during a run and by how
+// much.
+func (w *Writer) WritePoolsAtAttribution(pools []horizon.Pool) error {
+	if w.atAttr == nil {
+		f, err := os.Create(filepath.Join(w.dir, "pools_at_attribution.jsonl"))
+		if err != nil {
+			return fmt.Errorf("census: create pools_at_attribution.jsonl: %w", err)
+		}
+		w.atAttr = f
+		w.atAttrEn = json.NewEncoder(f)
+	}
+	for _, p := range pools {
+		if err := w.atAttrEn.Encode(p); err != nil {
+			return fmt.Errorf("census: write attribution-time pool %s: %w", p.ID, err)
+		}
+	}
+	return nil
+}
+
 // Close writes the manifest and closes the run's files. A run directory without
 // manifest.json is an interrupted run, and downstream readers should treat it
 // as such.
@@ -151,6 +189,11 @@ func (w *Writer) Close(m Manifest) error {
 	if w.posts != nil {
 		if err := w.posts.Close(); err != nil {
 			return fmt.Errorf("census: close positions.jsonl: %w", err)
+		}
+	}
+	if w.atAttr != nil {
+		if err := w.atAttr.Close(); err != nil {
+			return fmt.Errorf("census: close pools_at_attribution.jsonl: %w", err)
 		}
 	}
 

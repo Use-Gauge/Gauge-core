@@ -10,6 +10,8 @@ import (
 	"path/filepath"
 	"testing"
 	"time"
+
+	"github.com/shopspring/decimal"
 )
 
 // The fixtures are real Horizon responses, recorded from mainnet on 2026-09-06
@@ -77,10 +79,23 @@ func TestListPoolsReadsRecordedPage(t *testing.T) {
 	}
 }
 
-// The invariant this project is built on: an amount that came out of Horizon as
-// a decimal string goes back to that exact string. Not "close to", not "within
-// an epsilon of" — identical. A float64 round trip fails this, which is the
-// entire reason decimal.Decimal is a dependency.
+// The invariant this project is built on: an amount that came out of Horizon
+// parses to exactly the value Horizon sent. Not "close to", not "within an
+// epsilon of" — equal. A float64 round trip fails this, which is the entire
+// reason decimal.Decimal is a dependency.
+//
+// Note what is asserted and what is not. The test compares *values*, not
+// strings, because the two are not the same claim. Horizon always sends seven
+// decimal places ("2477.8894960") and shopspring/decimal's String() normalises
+// trailing zeros away ("2477.889496"). Roughly 30% of real reserve amounts
+// differ textually from the wire for that reason, with no difference in value.
+//
+// An earlier version of this test compared strings and passed, because the
+// three pools in the fixture happened to have no trailing zeros. It was
+// asserting something stronger than is true and would have failed the next time
+// anyone re-recorded fixtures. The format difference is pinned separately, in
+// TestDecimalStringNormalisesTrailingZeros, so it is documented behaviour
+// rather than a trap.
 func TestAmountsRoundTripExactly(t *testing.T) {
 	raw := fixture(t, "pools_page.json")
 
@@ -112,15 +127,56 @@ func TestAmountsRoundTripExactly(t *testing.T) {
 
 	for i, p := range got {
 		w := wire.Embedded.Records[i]
-		if p.TotalShares.String() != w.TotalShares {
-			t.Errorf("pool %s total_shares: parsed %q, Horizon sent %q",
-				p.ID, p.TotalShares.String(), w.TotalShares)
+
+		wantShares, err := decimal.NewFromString(w.TotalShares)
+		if err != nil {
+			t.Fatalf("fixture total_shares %q is not a decimal: %v", w.TotalShares, err)
+		}
+		if !p.TotalShares.Equal(wantShares) {
+			t.Errorf("pool %s total_shares: parsed %s, Horizon sent %s",
+				p.ID, p.TotalShares, wantShares)
 		}
 		for j, r := range p.Reserves {
-			if r.Amount.String() != w.Reserves[j].Amount {
-				t.Errorf("pool %s reserve %d: parsed %q, Horizon sent %q",
-					p.ID, j, r.Amount.String(), w.Reserves[j].Amount)
+			want, err := decimal.NewFromString(w.Reserves[j].Amount)
+			if err != nil {
+				t.Fatalf("fixture reserve %q is not a decimal: %v", w.Reserves[j].Amount, err)
 			}
+			if !r.Amount.Equal(want) {
+				t.Errorf("pool %s reserve %d: parsed %s, Horizon sent %s",
+					p.ID, j, r.Amount, want)
+			}
+		}
+	}
+}
+
+// Horizon sends every amount at seven decimal places; decimal.Decimal prints
+// the normalised form. The values are equal and no precision is lost, but the
+// strings differ, and anything that diffs a run file against a live Horizon
+// response textually will report changes that did not happen.
+//
+// Pinned as a test rather than left as folklore, because the failure it causes
+// is a confusing one: a reconciliation or a fixture refresh appears to show the
+// chain moving when nothing moved at all.
+func TestDecimalStringNormalisesTrailingZeros(t *testing.T) {
+	cases := []struct{ wire, printed string }{
+		{"2477.8894960", "2477.889496"},
+		{"5.0000000", "5"},
+		{"20000.0000000", "20000"},
+		{"0.0000000", "0"},
+		{"11718.7500000", "11718.75"},
+		{"5494.2144063", "5494.2144063"}, // already minimal, unchanged
+	}
+	for _, tc := range cases {
+		d, err := decimal.NewFromString(tc.wire)
+		if err != nil {
+			t.Fatalf("parse %q: %v", tc.wire, err)
+		}
+		if got := d.String(); got != tc.printed {
+			t.Errorf("decimal(%q).String() = %q, want %q", tc.wire, got, tc.printed)
+		}
+		// The value is unchanged, which is the part that matters.
+		if !d.Equal(decimal.RequireFromString(tc.wire)) {
+			t.Errorf("value changed for %q", tc.wire)
 		}
 	}
 }

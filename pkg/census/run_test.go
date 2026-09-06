@@ -116,3 +116,58 @@ func TestManifestMarksACompletedRun(t *testing.T) {
 		t.Errorf("manifest.json missing after Close: %v", err)
 	}
 }
+
+// Attribution-time pool state goes in its own file. Overwriting pools.jsonl
+// would destroy the very thing the mismatch investigation needed: the gap
+// between the census read and the attribution read is data, and comparing the
+// two files is how a run says which pools moved while it was running.
+func TestAttributionTimePoolsAreKeptSeparate(t *testing.T) {
+	dir := t.TempDir()
+	w, err := NewWriter(dir)
+	if err != nil {
+		t.Fatalf("NewWriter: %v", err)
+	}
+
+	census := horizon.Pool{ID: "p", TotalShares: decimal.RequireFromString("100.4000000")}
+	// The same pool a few hours later, after somebody deposited.
+	later := horizon.Pool{ID: "p", TotalShares: decimal.RequireFromString("114.9211768")}
+
+	if err := w.WritePools([]horizon.Pool{census}); err != nil {
+		t.Fatalf("WritePools: %v", err)
+	}
+	if err := w.WritePoolsAtAttribution([]horizon.Pool{later}); err != nil {
+		t.Fatalf("WritePoolsAtAttribution: %v", err)
+	}
+	if err := w.Close(Manifest{Holders: &HolderStats{PoolsReread: 1}}); err != nil {
+		t.Fatalf("Close: %v", err)
+	}
+
+	first, err := os.ReadFile(filepath.Join(dir, "pools.jsonl"))
+	if err != nil {
+		t.Fatalf("read pools.jsonl: %v", err)
+	}
+	second, err := os.ReadFile(filepath.Join(dir, "pools_at_attribution.jsonl"))
+	if err != nil {
+		t.Fatalf("read pools_at_attribution.jsonl: %v", err)
+	}
+	if !strings.Contains(string(first), "100.4") {
+		t.Errorf("census state was overwritten:\n%s", first)
+	}
+	if !strings.Contains(string(second), "114.9211768") {
+		t.Errorf("attribution-time state not recorded:\n%s", second)
+	}
+}
+
+// A run that attributed nothing must not grow the file, for the same reason
+// positions.jsonl is absent: an empty file and a pass that never ran are
+// different facts.
+func TestAttributionTimeFileAbsentWhenNotUsed(t *testing.T) {
+	dir := t.TempDir()
+	w, _ := NewWriter(dir)
+	if err := w.Close(Manifest{}); err != nil {
+		t.Fatalf("Close: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(dir, "pools_at_attribution.jsonl")); !os.IsNotExist(err) {
+		t.Error("pools_at_attribution.jsonl exists for a run that re-read nothing")
+	}
+}

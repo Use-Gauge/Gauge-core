@@ -185,3 +185,26 @@ func (c *Client) ListPools(ctx context.Context, maxPages int, visit func(page []
 	}
 	return pages, requests, nil
 }
+
+// Pool fetches a single pool's current state.
+//
+// This exists because a census assembled over hours is not a snapshot. The
+// attribution run of 2026-09-06 read pool rows in its first minute and the
+// corresponding holder lists up to 412 minutes later; five pools took a deposit
+// in between, and their holder balances summed to more than the total_shares
+// recorded for them. Nothing was wrong with either read — they described
+// different instants.
+//
+// Re-reading the pool row at the moment its holders are fetched costs one extra
+// request per attributed pool and makes a position's denominator contemporaneous
+// with its numerator, which is the difference between a share of a pool and a
+// share of a pool as it was several hours ago.
+func (c *Client) Pool(ctx context.Context, poolID string) (Pool, int, error) {
+	var raw rawPool
+	requests, err := c.getJSON(ctx, c.baseURL()+"/liquidity_pools/"+poolID, &raw)
+	if err != nil {
+		return Pool{}, requests, err
+	}
+	p, err := raw.toPool()
+	return p, requests, err
+}
