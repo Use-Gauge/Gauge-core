@@ -578,9 +578,11 @@ The number that made this session worth running is not 39,833. It is 208.
   threshold gives a different population, and the shape of the distribution
   (96.87% below it) means the answer is not very sensitive to where the line
   goes — but the line is still a choice.
-- **Trustline counts are upper bounds** on holders, by the zero-balance
-  positions observed. How much they over-count across the whole population is
-  not measured here.
+- **Trustline counts are upper bounds** on holders. The over-count is measured
+  at 6.58% across the 73,830 attributed positions, but those come almost
+  entirely from multi-holder pools; whether single-holder pools carry
+  zero-balance trustlines at the same rate is not measured, and by definition
+  a single-holder pool with a zero balance holds nothing at all.
 - **The activity figures measure pools, not positions.** A pool trades
   constantly while its liquidity providers do nothing for a year; both look like
   activity in `last_modified_ledger`.
