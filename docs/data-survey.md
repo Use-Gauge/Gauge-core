@@ -394,12 +394,37 @@ The consequences are not cosmetic:
    provision.** The median pool holds under one XLM. The median holder count is
    one. A model trained on the unweighted population would be modelling the long
    tail of pool spam.
-2. **The concentration metric needs restating before it is written.** Its honest
-   form is not "how concentrated is this pool among its holders" — a question
-   that is degenerate for 86% of pools — but something closer to "how
-   concentrated is Stellar AMM liquidity across pools", where the answer is one
-   pool holding 54% of pooled XLM. That is a coarser measure than account-level
-   attribution and this document is where the reason is recorded.
+2. **The concentration metric survives, but only on the in-scope subset.** An
+   earlier draft of this document concluded that within-pool concentration had
+   to be abandoned for a coarser cross-pool measure, on the grounds that it is
+   degenerate for the 86% of pools with a single holder. Measuring it rather
+   than assuming shows that conclusion was half wrong, and the half that was
+   wrong is the useful half.
+
+   Among the 5,351 multi-holder pools whose complete holder set was fetched:
+
+   | Largest holder owns | All multi-holder pools | In-scope pools (198 of 208) |
+   |---|---:|---:|
+   | ≥ 99% | 10.32% | **20.71%** |
+   | 90–99% | 22.31% | 21.72% |
+   | 50–90% | 54.12% | 31.82% |
+   | < 50% | 13.25% | 25.76% |
+
+   In the in-scope population the top-holder share runs from 0.0516 to 1.0000
+   with a **median of 0.7997** — a real distribution with real spread, not a
+   constant. Account-level concentration is therefore well-defined and
+   informative exactly where Gauge intends to compute it, and degenerate only
+   across the long tail it has already excluded.
+
+   Two things follow. Within-pool concentration stays as a metric, computed on
+   the in-scope population and reported as unavailable elsewhere rather than as
+   1.0. And the cross-pool measure — one pool holding 54% of pooled XLM — is a
+   separate statistic about the network, not a substitute for the per-position
+   one. The earlier draft conflated them.
+
+   Note also that in-scope pools are *more* top-heavy than multi-holder pools
+   generally: twice as many have a holder owning 99% or more. Size and holder
+   concentration are not offsetting.
 3. **The scale objection to Phase 2 disappears.** Reconstructing full effect
    history for 39,833 pools is infeasible. For 208 pools and their holders it is
    an afternoon. The expensive plan was expensive because it was aimed at the
