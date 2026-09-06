@@ -333,9 +333,35 @@ retention window**. The unrecoverable pools are almost entirely the dust.
 One caveat that the pool-level figure hides, and it is the important one: a pool
 being active inside the window does not mean each *position* in it was opened
 inside the window. A provider who deposited three years ago into a pool that
-trades daily has a live position and no recoverable entry basis. **How many
-positions are in that state is not measured here**, and it is the first thing
-Phase 2 should establish before promising a realised P&L for anything.
+trades daily has a live position and no recoverable entry basis.
+
+**That caveat turns out to be the dominant case, and it is measurable for free.**
+A position's `last_modified_ledger` says when its balance last changed. If that
+is before the retention boundary, the deposit that established it is provably
+outside the window and no amount of walking recovers it.
+
+| Positions with a non-zero balance | Total | Last changed before the boundary |
+|---|---:|---:|
+| All pools | 68,970 | **56,336 (81.68%)** |
+| In-scope pools (208) | 11,157 | **9,139 (81.91%)** |
+
+**Entry basis is unrecoverable for roughly four positions in five.** Not
+expensive to recover — impossible, because the ledger history Horizon would
+serve it from no longer exists.
+
+The remaining 18.09% is an upper bound, not a count: a position whose balance
+moved recently may still have been opened years ago and merely topped up. A
+sampled effects walk over those positions tests which is which, by checking
+whether the in-window deposits and withdrawals sum to the current balance —
+if they do, the position began at zero inside the window and its basis is
+complete.
+
+The consequence for Gauge is not a caveat, it is a design constraint, and the
+metrics layer is built around it: impermanent loss, fee yield and net P&L are
+reported as **unavailable** for positions without a recoverable basis, never
+estimated from an assumed one. Roughly four table cells in five are a dash. The
+alternative — inventing a cost basis — would produce a plausible P&L for most of
+the population, and plausible is the failure this project exists to avoid.
 
 ---
 
