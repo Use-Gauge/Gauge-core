@@ -209,17 +209,52 @@ Checks:
 
 ---
 
+## 7. Trade price normalisation
+
+Not a metric, but the input to two of them, and the place a plausible-looking
+series goes wrong silently.
+
+Horizon reports each trade from the taker's side: `price` is counter/base, and
+which asset is the base flips between trades in the same pool. A series built
+without normalising alternates between `p` and `1/p`.
+
+The check is against an independent measurement of the same quantity — the
+pool's own reserve ratio:
+
+- Pool: `a468d41d…` (native/USDC), the largest on the network.
+- Reserves at the time of recording: `12,286,463.1416566` XLM against
+  `2,295,481.1143391` USDC.
+- Reserve ratio, price of A in B: **0.1868300981229003**.
+- All 20 real trades in the fixture normalise to within 20% of that figure.
+
+The inverted form would be `5.4`, off by a factor of about 29 — so this test
+distinguishes the two decisively rather than marginally. A pool whose price is
+genuinely flat would otherwise report several hundred percent volatility.
+
+Prices are taken from Horizon's exact `n`/`d` rational rather than by dividing
+the two amount strings, so the value stays exactly as the ledger expressed it and
+no float appears in the path.
+
+---
+
 ## What is *not* verified here
 
 - **No metric is checked against a live Horizon computation**, because Horizon
   computes none of these. There is no upstream figure to agree with.
-- **Nothing is checked against a real position's realised outcome**, because the
-  survey established that entry basis is unrecoverable for 81.91% of in-scope
-  positions — Horizon retains 365 days and most positions last moved before that
-  boundary. The formulas are verified; their application to the remaining ~18%
-  is Phase 2's next step, and until an effects walk confirms those positions
-  were opened inside the window, the CLI reports P&L as unavailable rather than
-  computing it from an assumed basis.
-- **Realised volatility and drawdown are not yet computed from real runs**, only
-  from constructed series, because a single census gives one observation per
-  pool. They need the time series a repeated ingest produces.
+- **Nothing is checked against a real position's realised outcome**, and the
+  survey now quantifies why. Horizon retains 365 days of history, 81.91% of
+  in-scope positions last moved before that boundary, and a sampled effects walk
+  over the remainder found that fewer than half of *those* were actually opened
+  inside the window. The estimate is that about **8.68% of in-scope positions
+  (95% interval 5.14%–12.22%) have a complete, recoverable entry basis** — of
+  order a thousand positions.
+
+  The formulas are verified against known cases. Computing them over those
+  thousand positions is real work that this repository can now do, and it is the
+  obvious next step; until it is done, the CLI reports P&L as unavailable rather
+  than computing it from an assumed basis.
+- **Realised volatility and drawdown were, until trade ingestion existed, only
+  checked against constructed series**, because a census gives one price per
+  pool and one point has no variance. `cmd/ingest -trades N` now builds a real
+  price series per pool, and the normalisation that makes it meaningful is
+  itself verified against an independent measurement — see below.

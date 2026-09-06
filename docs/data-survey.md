@@ -347,14 +347,41 @@ outside the window and no amount of walking recovers it.
 
 **Entry basis is unrecoverable for roughly four positions in five.** Not
 expensive to recover — impossible, because the ledger history Horizon would
-serve it from no longer exists.
+serve it from no longer exists. Sampling the remainder, below, brings the
+fraction with a *complete* basis down to about **one in twelve**.
 
 The remaining 18.09% is an upper bound, not a count: a position whose balance
-moved recently may still have been opened years ago and merely topped up. A
-sampled effects walk over those positions tests which is which, by checking
-whether the in-window deposits and withdrawals sum to the current balance —
-if they do, the position began at zero inside the window and its basis is
-complete.
+moved recently may still have been opened years ago and merely topped up.
+
+A sampled effects walk tests which is which. For each sampled position it sums
+the account's in-window `liquidity_pool_deposited` and `liquidity_pool_withdrew`
+effects for that pool; if the net equals the current balance, the position began
+at zero inside the window and its basis is complete. **25 of the 2,018 were
+sampled** (seeded, reproducible via
+`scripts/entry-basis-sample.py`):
+
+| Outcome | Sampled | Share |
+|---|---:|---:|
+| Complete — opened inside the window | 12 | 48% |
+| Partial — predates the window | 9 | 36% |
+| Inconclusive — no events within the 25-page walk limit | 4 | 16% |
+
+So **less than half** of the positions that looked recoverable actually are.
+Extrapolated, roughly **969 of 11,157 in-scope positions (8.68%) have a complete,
+recoverable entry basis.**
+
+That extrapolation rests on 25 observations and the error bars are wide: the 95%
+binomial interval on 12/25 runs 28%–68%, which puts the true figure somewhere
+between **5.14% and 12.22%** of in-scope positions. The estimate is reported with
+its interval rather than as a point, and a larger sample would narrow it.
+
+Two honest caveats on the method. The 16% inconclusive are a limit of the walk —
+25 pages of an account's effects — not a property of the data; a deeper walk
+would resolve them either way, and they are counted as neither recoverable nor
+not. And the test proves a position *began* inside the window, which is the
+right question for a cost basis, but a position opened in-window and topped up
+repeatedly still needs every one of those deposits, all of which this test
+confirms are present.
 
 The consequence for Gauge is not a caveat, it is a design constraint, and the
 metrics layer is built around it: impermanent loss, fee yield and net P&L are
