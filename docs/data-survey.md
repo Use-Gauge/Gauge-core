@@ -249,11 +249,42 @@ three consecutive 503s, then a 200. The client retries; the manifest enumerates
 every pool that could not be fetched after retries, by ID, so a census with
 holes has labelled holes.
 
-**Anything Horizon has already forgotten.** Horizon's retention is not
-unbounded, and this survey did not probe how far back the effect history for
-these pools actually reaches. Positions whose deposits predate the retention
-window may have no recoverable entry basis at any cost. **This is untested and
-is stated as an open question, not a finding.**
+**Horizon has already forgotten a year-old ledger, and this is measurable.**
+This started as an open question in an earlier draft and turned out to be cheap
+to answer: Horizon reports its own retention boundary at the root endpoint. As
+of 2026-09-06T13:13:57Z, `horizon.stellar.org` reports
+
+```
+history_latest_ledger: 64,301,173
+history_elder_ledger:  57,993,841
+```
+
+a retained window of 6,307,332 ledgers — almost exactly **365 days**. Nothing
+before it is retrievable from this instance at any price.
+
+The consequences for the population:
+
+| | Pools | Share |
+|---|---:|---:|
+| Last activity predates the retention window | **6,097** | 15.31% |
+| …of those, XLM-legged holding ≥ 1,000 XLM | 3 | — |
+
+For those 6,097 pools there is no recoverable history whatsoever — not the
+deposits, not the trades, not even the most recent event. They exist in current
+state with nothing behind them. Probing the single oldest-touched pool in the
+census directly confirms it: `GET /liquidity_pools/<id>/effects?order=asc`
+returns an empty record set.
+
+This cuts the other way for the population Gauge actually cares about. Of the
+208 in-scope pools identified below, **207 (99.5%) have activity inside the
+retention window**. The unrecoverable pools are almost entirely the dust.
+
+One caveat that the pool-level figure hides, and it is the important one: a pool
+being active inside the window does not mean each *position* in it was opened
+inside the window. A provider who deposited three years ago into a pool that
+trades daily has a live position and no recoverable entry basis. **How many
+positions are in that state is not measured here**, and it is the first thing
+Phase 2 should establish before promising a realised P&L for anything.
 
 ---
 
@@ -353,7 +384,6 @@ The number that made this session worth running is not 39,833. It is 208.
 - **The activity figures measure pools, not positions.** A pool trades
   constantly while its liquidity providers do nothing for a year; both look like
   activity in `last_modified_ledger`.
-- **Horizon's history retention is unprobed**, as noted above.
 - **Nothing here is longitudinal.** This is one census on one day. Whether these
   distributions are stable, seasonal, or currently anomalous is unknown, and no
   claim in this document should be read as a claim about any other day.
