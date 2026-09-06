@@ -250,11 +250,35 @@ def test_a_single_dust_trade_does_not_destroy_the_drawdown(tmp_path):
     assert max_drawdown(raw).max_drawdown < D("-0.99")
 
 
+def test_the_thirteen_twelfths_family_is_excluded(tmp_path):
+    """The case a 10-stroop threshold let through.
+
+    Twelve stroops against thirteen reports 13/12 = 1.0833…, which looks like a
+    plausible price and is not one — it is the finest thing a twelve-stroop
+    trade can say. The XLM/yXLM series was full of these.
+    """
+    pools = [pool("p", trustlines=2)]
+    trades = [
+        trade("p", "t1", 1, "1.003"),
+        trade(
+            "p", "t2", 2, "1.0833333333333333", base="0.0000012", counter="0.0000013"
+        ),
+        trade("p", "t3", 3, "1.004"),
+    ]
+    d = write_run(
+        tmp_path, pools=pools, positions=[], at_attribution=pools, trades=trades
+    )
+    run = load(d)
+    assert run.dust_count("p") == 1
+    assert len(run.price_series_for("p")) == 2
+
+
 def test_a_small_but_well_formed_trade_is_kept(tmp_path):
     """Only the range where the rational cannot express a price is excluded.
 
     Discarding genuinely small trades would be throwing away real data to tidy
-    a chart.
+    a chart. 0.001 is 10,000 stroops: quantisation error of one part in ten
+    thousand, far finer than any move these metrics detect.
     """
     pools = [pool("p", trustlines=2)]
     trades = [

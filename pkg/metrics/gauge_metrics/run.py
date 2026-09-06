@@ -32,19 +32,29 @@ class Pool:
         return self.reserve_a == 0 and self.reserve_b == 0
 
 
-# Amounts at or below this are at the ledger's resolution floor, where a
-# reported price stops carrying information.
+# Below this, a trade's reported price is too coarsely quantised to be a price.
 #
-# Stellar stores amounts as integers of 1e-7. A swap of one stroop for one
-# stroop reports price 1/1 = 1 no matter what the pool is actually worth, and a
-# swap of one stroop for two reports 2. These are quantisation artefacts, not
-# prices.
+# Stellar stores amounts as integers of 1e-7. A swap of N stroops against M
+# stroops reports the rational M/N, whose relative granularity is 1/N — so the
+# smaller the trade, the coarser the price it can express, regardless of what
+# the pool is actually worth.
 #
-# The threshold is deliberately at the floor itself rather than at some round
-# number above it: excluding a genuinely small but well-formed trade would be
-# discarding real data to tidy a chart. What is excluded here is only the range
-# where the rational cannot express the price.
-DUST_THRESHOLD = Decimal("0.0000010")
+# At one stroop the rational degenerates completely: one stroop for one stroop
+# reports exactly 1, and two for one reports exactly 2. At twelve stroops the
+# best it can say is a thirteenth. The XLM/yXLM pool, whose true ratio is about
+# 1.003, has a price series dominated by 1, 2, 9/8, 13/12, 3/2 and 4/3 for
+# exactly this reason, and it reported a drawdown of -50.00% from a "peak" of 2
+# that was a two-stroop swap.
+#
+# The threshold is therefore set by precision, not by size: 100 stroops bounds
+# the quantisation error at 1%, which is finer than any price move these metrics
+# are meant to detect. An earlier version used 10 stroops, which caught the
+# degenerate 1/1 and 2/1 cases but let the 13/12 family through.
+#
+# It is still an absurdly small trade — 1e-5 XLM is a few millionths of a cent —
+# so nothing with economic content is excluded. What is excluded is only the
+# range where the ledger's own resolution prevents the price from being stated.
+DUST_THRESHOLD = Decimal("0.00001")
 
 
 @dataclass(frozen=True)
@@ -60,7 +70,7 @@ class Trade:
 
     @property
     def is_dust(self) -> bool:
-        """Whether either side is small enough that the price is meaningless.
+        """Whether either side is too small for the reported price to mean anything.
 
         A trade with no recorded amounts (older run files) is not treated as
         dust: absent information must not masquerade as a judgement.
@@ -123,11 +133,13 @@ class Run:
         measure the series running backwards, which reports the recovery as the
         decline.
 
-        Dust is excluded because a stroop-for-stroop swap reports a price of
-        exactly 1 regardless of the pool's real price. Drawdown is maximally
-        sensitive to a single outlier, so one such trade is enough to ruin it:
-        in the native/LUSD pool, which trades near 5958, a single one-stroop
-        trade produced a reported peak-to-trough of -99.98%.
+        Dust is excluded because a swap of a few stroops cannot express a price:
+        its rational is quantised at 1/N, so a one-stroop swap reports exactly 1
+        whatever the pool is worth. Drawdown is a max over the series and so is
+        maximally sensitive to one outlier — in the native/LUSD pool, trading
+        near 5958, a single one-stroop trade produced a reported peak-to-trough
+        of -99.98%. In XLM/yXLM, whose true ratio is about 1.003, 166 of 600
+        observations were of this kind and the reported drawdown was -50.00%.
 
         Pass ``drop_dust=False`` to see the unfiltered series, which is what the
         dust_count comparison in the survey is built from.
