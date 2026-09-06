@@ -1,0 +1,7 @@
+bin/
+coverage.out
+coverage.html
+
+# Ingested runs are large and reproducible from the CLI. Individual runs cited
+# by a document are committed deliberately, by path, with `git add -f`.
+data/runs/

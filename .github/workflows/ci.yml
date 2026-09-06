@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  merge_group:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# One place for the toolchain. Wayfare learned this the expensive way: the Go
+# version lived in three separate job definitions, drifted, and lint ended up
+# passing on a different toolchain than the one that built the binary. Defining
+# it once keeps CI honest about go.mod, which says 1.22.2.
+env:
+  GO_VERSION: "1.22"
+
+jobs:
+  build:
+    name: build and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+
+      - name: gofmt
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "These files are not gofmt'd:"
+            echo "$unformatted"
+            gofmt -d .
+            exit 1
+          fi
+
+      - name: go vet
+        run: go vet ./...
+
+      - name: go test -race
+        run: go test -race ./...
+
+      - name: go build
+        run: go build ./...
+
+  # The float ban is the project's central invariant and the one most likely to
+  # be violated by an otherwise reasonable change, because float64 is what a Go
+  # programmer reaches for without thinking. Convention would not hold it; this
+  # does. The statistical layer, when it exists, will live in Python and is
+  # explicitly exempt — this checks the Go accounting path only.
+  no-floats:
+    name: no floats in the accounting path
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: grep for float types in pkg/ and cmd/
+        run: |
+          set -euo pipefail
+          if ! ls pkg cmd >/dev/null 2>&1; then
+            echo "no pkg/ or cmd/ yet; nothing to check"
+            exit 0
+          fi
+          hits=$(grep -rnE '\bfloat(32|64)\b|ParseFloat|\bmath\.' pkg cmd \
+                   --include='*.go' || true)
+          if [ -n "$hits" ]; then
+            echo "Floating-point arithmetic found in the accounting path:"
+            echo "$hits"
+            echo
+            echo "Every monetary value in Gauge is decimal.Decimal. See CONTRIBUTING.md."
+            exit 1
+          fi
+          echo "clean: no float types in pkg/ or cmd/"
