@@ -69,8 +69,14 @@ jobs:
             echo "no pkg/ or cmd/ yet; nothing to check"
             exit 0
           fi
+          # Strip comment lines first. The grep was matching the package
+          # documentation that explains *why* floats are banned, which is a
+          # spectacular way to make a guard rail useless: it fires on the
+          # sentence describing the rule and cries wolf until someone disables
+          # it. Only lines of actual code are checked.
           hits=$(grep -rnE '\bfloat(32|64)\b|ParseFloat|\bmath\.' pkg cmd \
-                   --include='*.go' || true)
+                   --include='*.go' \
+                 | grep -vE ':[0-9]+:[[:space:]]*(//|\*)' || true)
           if [ -n "$hits" ]; then
             echo "Floating-point arithmetic found in the accounting path:"
             echo "$hits"
@@ -79,3 +85,40 @@ jobs:
             exit 1
           fi
           echo "clean: no float types in pkg/ or cmd/"
+
+  # The suite must run from recorded fixtures, never from live Horizon, or it
+  # passes and fails on SDF's uptime rather than on the code.
+  #
+  # This job earned its place immediately. On its first run it caught the
+  # client following Horizon's absolute `next` pagination links straight back
+  # to mainnet — page one from the local test server, page two from the real
+  # internet. Every test passed on a connected machine. See Client.rebase.
+  offline-tests:
+    name: tests run with no network
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+
+      - name: download modules
+        run: go mod download
+
+      - name: run tests with no network
+        run: |
+          set -euo pipefail
+
+          # Ubuntu runners restrict unprivileged user namespaces through
+          # AppArmor, so plain `unshare -rn` fails on uid_map. Lifting that is
+          # preferable to sudo: as root the module cache resolves to a
+          # different HOME and the download just warmed is missed.
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
+          # Loopback stays up inside the namespace because the tests stand up
+          # httptest servers on 127.0.0.1; tearing it down would fail them for
+          # a reason unrelated to egress.
+          unshare -rn bash -c 'ip link set lo up 2>/dev/null; go test -count=1 ./...'

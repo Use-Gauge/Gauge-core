@@ -1,0 +1,2098 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://horizon.stellar.org/accounts?cursor=\u0026limit=1\u0026liquidity_pool=0000a8198b5e25994c1ca5b0556faeb27325ac746296944144e0a7406d501e8a\u0026order=asc"
+    },
+    "next": {
+      "href": "https://horizon.stellar.org/accounts?cursor=GDVHNSHOVDFR755ZRO6SLKXFQQC3ADLY4A2I6ILHNMKFCEWD5HXW7PY2\u0026limit=1\u0026liquidity_pool=0000a8198b5e25994c1ca5b0556faeb27325ac746296944144e0a7406d501e8a\u0026order=asc"
+    },
+    "prev": {
+      "href": "https://horizon.stellar.org/accounts?cursor=GDVHNSHOVDFR755ZRO6SLKXFQQC3ADLY4A2I6ILHNMKFCEWD5HXW7PY2\u0026limit=1\u0026liquidity_pool=0000a8198b5e25994c1ca5b0556faeb27325ac746296944144e0a7406d501e8a\u0026order=desc"
+    }
+  },
+  "_embedded": {
+    "records": [
+      {
+        "_links": {
+          "self": {
+            "href": "https://horizon.stellar.org/accounts/GDVHNSHOVDFR755ZRO6SLKXFQQC3ADLY4A2I6ILHNMKFCEWD5HXW7PY2"
+          },
+          "transactions": {
+            "href": "https://horizon.stellar.org/accounts/GDVHNSHOVDFR755ZRO6SLKXFQQC3ADLY4A2I6ILHNMKFCEWD5HXW7PY2/transactions{?cursor,limit,order}",
+            "templated": true
+          },
+          "operations": {
+            "href": "https://horizon.stellar.org/accounts/GDVHNSHOVDFR755ZRO6SLKXFQQC3ADLY4A2I6ILHNMKFCEWD5HXW7PY2/operations{?cursor,limit,order}",
+            "templated": true
+          },
+          "payments": {
+            "href": "https://horizon.stellar.org/accounts/GDVHNSHOVDFR755ZRO6SLKXFQQC3ADLY4A2I6ILHNMKFCEWD5HXW7PY2/payments{?cursor,limit,order}",
+            "templated": true
+          },
+          "effects": {
+            "href": "https://horizon.stellar.org/accounts/GDVHNSHOVDFR755ZRO6SLKXFQQC3ADLY4A2I6ILHNMKFCEWD5HXW7PY2/effects{?cursor,limit,order}",
+            "templated": true
+          },
+          "offers": {
+            "href": "https://horizon.stellar.org/accounts/GDVHNSHOVDFR755ZRO6SLKXFQQC3ADLY4A2I6ILHNMKFCEWD5HXW7PY2/offers{?cursor,limit,order}",
+            "templated": true
+          },
+          "trades": {
+            "href": "https://horizon.stellar.org/accounts/GDVHNSHOVDFR755ZRO6SLKXFQQC3ADLY4A2I6ILHNMKFCEWD5HXW7PY2/trades{?cursor,limit,order}",
+            "templated": true
+          },
+          "data": {
+            "href": "https://horizon.stellar.org/accounts/GDVHNSHOVDFR755ZRO6SLKXFQQC3ADLY4A2I6ILHNMKFCEWD5HXW7PY2/data/{key}",
+            "templated": true
+          }
+        },
+        "id": "GDVHNSHOVDFR755ZRO6SLKXFQQC3ADLY4A2I6ILHNMKFCEWD5HXW7PY2",
+        "account_id": "GDVHNSHOVDFR755ZRO6SLKXFQQC3ADLY4A2I6ILHNMKFCEWD5HXW7PY2",
+        "sequence": "203464605245112698",
+        "sequence_ledger": 51147089,
+        "sequence_time": "1712576524",
+        "subentry_count": 404,
+        "home_domain": "stellarterm.com",
+        "last_modified_ledger": 63395562,
+        "last_modified_time": "2026-07-09T07:07:08Z",
+        "thresholds": {
+          "low_threshold": 0,
+          "med_threshold": 0,
+          "high_threshold": 0
+        },
+        "flags": {
+          "auth_required": false,
+          "auth_revocable": false,
+          "auth_immutable": false,
+          "auth_clawback_enabled": false
+        },
+        "balances": [
+          {
+            "balance": "5494.2144063",
+            "liquidity_pool_id": "0000a8198b5e25994c1ca5b0556faeb27325ac746296944144e0a7406d501e8a",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47890789,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "00b297a3a0ef419ff0dcf3f1a32fd9bee0e946b72e529e62391136f6b51d8e98",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374275,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "69191842.8237415",
+            "liquidity_pool_id": "0604638d0530807e107614b9397f4700490b077c1fb832779caf75a493ad3d63",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47445830,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "3213.4673278",
+            "liquidity_pool_id": "093eb31759c8ad6c9720f7a5772745f55673d72020906efc3f1732d5aec996e4",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47877120,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "52344.2966509",
+            "liquidity_pool_id": "095c33dca74df6d01b96e2242e0f11916552349679d8618d3ff19b1415f478ee",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926433,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "3387799.8127539",
+            "liquidity_pool_id": "10955d40efbe6bc4695224a3d0adfb808ee1b815fe93c98a7d6ccf8a8e8a3b63",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 49223476,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "29190187.0424522",
+            "liquidity_pool_id": "14800ef65965cc08276eff697911a405ff5c654766abb555b80acbadcd0f5307",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47877192,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "7076139.0229822",
+            "liquidity_pool_id": "1509581f959b9e612cf8477c07bdc2e52e8213b0d623ee51d3f40c0919991707",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 49223473,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "70846.5006987",
+            "liquidity_pool_id": "156e1ff076f0f6fb6ae8fb73a5cb159538c5ac2d44b59d926487e04af7f56f3a",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926393,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "16436bc87734e20dac15d486932556fd0716e9ff6da6f8ca6fe41effdafafb4b",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374264,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "33886.1391821",
+            "liquidity_pool_id": "175b768a036e1581a92a6b690746e2f3f7196b3bbcb2c431a14417ea4ca7e3c2",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926406,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "43532.4946387",
+            "liquidity_pool_id": "1c8766f7e7fcaf9b498338fcdae649939428efbaddb5c2f7301e25ce1b87aa32",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926378,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2803.9793151",
+            "liquidity_pool_id": "1dba275541da541a82485fdf1dcdf93bc377fdbec7a3cc7457f1e979afc9a053",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373789,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "21400.1875617",
+            "liquidity_pool_id": "1f60ee0e4bab0fe5292ed6beafc779ac4fe1f882b153770519778f03969dbf5d",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926391,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2260.1122335",
+            "liquidity_pool_id": "20102db4e69b3cb908e9d3d93c382ea34b71753541a311839e9b28fc123cdef1",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373873,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "16348.6136916",
+            "liquidity_pool_id": "201dfc238054b12583fc9ae312c6ecb8a425fe9e42ef5883b8f0c8a7188764c1",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926375,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "4433480.5739960",
+            "liquidity_pool_id": "20fb84ef0dd2c31754fc511552d085a0986497cf4c8c6020e4069b600793c553",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373972,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "20000000.0000000",
+            "liquidity_pool_id": "2106c94b3aa66beb0ddbea64f6c28618ea8b5a56a622538a7f80d9c2d078ada5",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47888680,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "147010.0194779",
+            "liquidity_pool_id": "21fad98a9a9adfd6f14e848d88c2f92bb5f5fee7c65a03d04ecac392d83957ac",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47870060,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "98395051.3217441",
+            "liquidity_pool_id": "22c61b16dd8d6c32b4d2a271dfc94f034a283194c75b6f3b0b8058cde43f64cf",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47890913,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1997.7637347",
+            "liquidity_pool_id": "23df1dcf4b7489c63e26f3698ff100fb8c2d2ccb03181bfd39b9f5ba3db88ffd",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373862,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "8614318.2518856",
+            "liquidity_pool_id": "24a8486ed41df9eaf5e308e4eb8c837e91b8b8612fa7becafed086056517bae2",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47890831,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1196761.8462075",
+            "liquidity_pool_id": "26e5a46b8e7abb79308f7b86d2dd1f188ab3821cae6912615ee1610b9c87bd61",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373959,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "85977395.7251756",
+            "liquidity_pool_id": "274d1b249ab83d70aaae6b0eed8088508acbadcce9b1a4f33e1350bcf35bd9a7",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47445849,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "16174.4192522",
+            "liquidity_pool_id": "283434d82e4300184cece703400a107a8ea6cbca28ecb652303c0714e5e65b76",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926395,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "28ef0959123952e07b43d215f6d04e32c77e2ad61367b9243e9afdb622bec90e",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374189,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "16996.1500947",
+            "liquidity_pool_id": "2a46a29be611aa47fa5c5dba45b3c202a6da37b32bf8a08bb9cbdc0be90feb2c",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926447,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "167.5244617",
+            "liquidity_pool_id": "2aba8eab2ce9157db5953ade9ff36371ea0a91781cb1e49e4f087ef0bb7347e6",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926339,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1000000.0000000",
+            "liquidity_pool_id": "2be0c4336db13d2015336576a52d25fcf80e269bef3a34b4adae97e988710855",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47870085,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1000000.0000000",
+            "liquidity_pool_id": "2db9fe2cb1531ceb10cd1e63c5bd7f9ae7d746010ded4ab9e669ec059dbeb54b",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47870087,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "118.8379394",
+            "liquidity_pool_id": "2def3a6d153001f236dccc9c9d68a48aec744d679aaa8b466bfe8c06b01cf790",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926367,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2803.9793151",
+            "liquidity_pool_id": "2e9f193efbf3f0d6905473a4eccff904f0f8b7831ab0202b39eb5344882e6920",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373795,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "33915.0320820",
+            "liquidity_pool_id": "2fcbf5fb5111cd89644a2a78d1a1bec97171489fec440feb0b2ad88ae3173462",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926438,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "4433480.5739960",
+            "liquidity_pool_id": "30ae40b781617bf6641b745b789fe323422bd6b914e134d2f06ff82ac4cf48aa",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373976,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "84574.8254101",
+            "liquidity_pool_id": "31733260e3d8c68ad93b4c9d444804a86fe760ade10dd8df01495b59b39d0d0f",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926385,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2803.9793151",
+            "liquidity_pool_id": "330f03dafd66ba7039ab8bdac0b9323a85be2bbbe6c5175fc7c4c55bcd22022e",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373810,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "727.4472719",
+            "liquidity_pool_id": "343d66fe739c8fe6ecba3935248b04fae3bff3a8d717f21bc1abca5d9449fd9c",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926402,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "4433480.5739960",
+            "liquidity_pool_id": "34c0bcc7941b25a266f8e07e4a8612e3d562fddd9ab4968224a568d2e86e2770",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373978,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "85687162.9519489",
+            "liquidity_pool_id": "37755b26e9f7976fee0942e85a9bf637afb355ff4662e93c2fa2f16d988db2ea",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47445836,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "80350.2639315",
+            "liquidity_pool_id": "3b9aade03af1d4262eaa2d05bf19618e19422868af3fbcad0fce2a621acb2d28",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926424,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "4433480.5739960",
+            "liquidity_pool_id": "3c704297addea3bb5defc9f20290c32a2c33414a744633541876dfee0b587a03",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373964,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "62789680.5413775",
+            "liquidity_pool_id": "3c75b7d8b418b2652cb28a115ff6349170777333bdde01766fd3587330a422bd",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47445834,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2803.9793151",
+            "liquidity_pool_id": "3e7b91c0c771478f2aa4193925fb145bee980a13314bc6cf46842fe40cca1166",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373808,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "41ada284c6205fef0d781d8cee3e685565cc8d97ba559d4d1cdfbb4d2f2e8823",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374195,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2803.9793151",
+            "liquidity_pool_id": "421eae210f966fed24de036bb61ac461a5cfa88f0d2bea76f93d64e253b0ae82",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373793,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "4433480.5739960",
+            "liquidity_pool_id": "426431f04fc8a377b70e0d12e521a32bd679e38c2feb04ed2c86471935a55ab9",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373981,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1000000.0000000",
+            "liquidity_pool_id": "43831727bf69ecb1b6f44dd203fc290cf71bf66712a7abe06dbe4fda00ed1c93",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47870077,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2803.9793151",
+            "liquidity_pool_id": "43ca8a7f5af309ee43ceca69b04ae677b9a5a11a0fe8f59c4f74c918fbd4c289",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373814,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2803.9793151",
+            "liquidity_pool_id": "4a1199445f2e8adbcc7adbb81957feb6b7959272dc84b18845cf84e6a06f347c",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373791,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "118.8380432",
+            "liquidity_pool_id": "4b256cc0dbc1300ffbf802a2a63a78328bb198bf71fc1589a00f1221148c09f1",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926362,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "11737.5791931",
+            "liquidity_pool_id": "4dfb6d0507d13e680546385d4fd5d2d300dd2947d4f90dbd46d3a0d37b333246",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47890903,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "4433482.7907357",
+            "liquidity_pool_id": "4e1fd3556f5ac516f572ca2adae72aa682e868b6340ab60971b9e97dda4bfcfb",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373983,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "84768.9943592",
+            "liquidity_pool_id": "586c0896a2c4bfa5539580b0c766b4a372d505e35903cc6a0ec72525c9312227",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926387,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "9913579.3063920",
+            "liquidity_pool_id": "5bced2e1aa2e304f3cde348721e49b85dcf90126816ed988cf76a120d50c27c4",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373906,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "10229.3832987",
+            "liquidity_pool_id": "5c103af702395bcdc10981743fb2174ba57f5ed04222e10d5bb6b7dcc5117c1c",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926451,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2179.4151265",
+            "liquidity_pool_id": "5cabafad4a58ed0de6e421fb91696596d23d6599eaaeb80103a48ddfe7472186",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47877116,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "80350.2639315",
+            "liquidity_pool_id": "5d693d29c25559b61f1bdac1fce2d4c0528c40d22857d656f4024bb2b28b37cd",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926425,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "3233.1861134",
+            "liquidity_pool_id": "5d9108f74e8c50b26ac745520205830ddfad2b51db0722f0d38c013195bfd700",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373869,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "618d73128d1962e4588b51fc55a65462c3d83892fcb719b72313a7eb00d7eb56",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374270,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "23518.6418198",
+            "liquidity_pool_id": "62cc4c530ccbf368fc357a3570b459bd94bb0cf46556c1f13e50e70c6262d34c",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926416,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "463.9810884",
+            "liquidity_pool_id": "6396594f9c210c34a6b228154e6b1aa920e895c3f5e5ce1f7ec87643c16aab20",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926347,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "68837680.2061187",
+            "liquidity_pool_id": "6441be9c1de12a4912651a82c79f1c4c8e3ffdbb8a47ff6d4493742641d3d6f0",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47445838,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "67363773e557af206c2bef5ac7379cdab8054cde49e19ee3d8a965011914103b",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374268,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2276.4670829",
+            "liquidity_pool_id": "6752707a4b381523b8b3e11adfca275a8f03745c45c8186aabfb8be445a033b2",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47890835,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2803.9793151",
+            "liquidity_pool_id": "67ad99ec51d1fa8741b0e44ea8937fb2020cc2cf355b00b0299fb29fbed0babb",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373788,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "26427985.3254640",
+            "liquidity_pool_id": "6a121ec3215656ddd515652697ebda7a7dff793523a0e5f80775eff3c8bd49fc",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47877127,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "15540066.6081900",
+            "liquidity_pool_id": "6c0cdc57b092f945fb9771337ebcfebe747e0a22904d4abc000df7a6f2a3d896",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47888687,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "5119.0479004",
+            "liquidity_pool_id": "6deea05df8f23586fd4775fc1e05c81f97067fa0713d886f1871e767064d2972",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373878,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "16774.5442360",
+            "liquidity_pool_id": "6e13d99f343dab4b587dbc2443f88d48580eb78ae61f21785edc31f46c3f5eb5",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47787583,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "4433480.5739960",
+            "liquidity_pool_id": "6f9e4c3572ed3240b5d024c0f8f2080938a9dde849df20e6042e649375e4fae1",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373979,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "63388474.9653427",
+            "liquidity_pool_id": "701ae991855c03536cf010d82b4234fdd3deb965d015e05855198016027b4ca4",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47787586,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "5979917.1806529",
+            "liquidity_pool_id": "73631290ce0630f76076df21bc7b747030dbb111d41e1b7b6f2e73d2d0b68043",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374284,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1982.7158612",
+            "liquidity_pool_id": "73d4bc5774fede7d4d0be0e4fda89ae87668e6040239918ff3bf248e9075ab1c",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373866,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "743c8d7e02b3e87c6db4a7ef8f235670ab9f5c668228c6fdf4a37ddc068d998e",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374184,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "81882.1088444",
+            "liquidity_pool_id": "764532eab60a68a1965ab417ea57b076b0547c0918f7fcd6d3ddc030ab80a7aa",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926429,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "127.4253734",
+            "liquidity_pool_id": "7937623ab02813f89a46c7e0d55a1e04aa9b04e989eadc514a3ffa2c55629881",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926344,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "26075.1893285",
+            "liquidity_pool_id": "7970cb224d4ed0523759087eec8b98db084da077737a07b9b0f436561c9e962c",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926407,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "7ad720042d6a5604e7cd133e58857ad9c7667f0ce1827d12d8a18b2cfa94cbf2",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374215,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1000000.0000000",
+            "liquidity_pool_id": "7b8e888efafc130a230a4601afd0bad1b72ecf1ff8ee6ad90fd8021a1eb9b7c8",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47870056,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "582395.8376929",
+            "liquidity_pool_id": "7be61f448f64d5cf0ba8f4b78ab5dcaca6d86adb0437d5e04c3f3a1c56f4b3ba",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47466831,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2255.9577338",
+            "liquidity_pool_id": "7df78d59def291bc3f222654e02692aeb6acb774ba655790c9d9fd7957270ce3",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373871,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2803.9793151",
+            "liquidity_pool_id": "7e9411d8ba1062981f7fe5d392c749e52dd07ae500be0e34e212ec06cd33b68b",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373801,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "806209f6449be855c2e3696efb3b434f52de1d05ffebc28de8f45945eea3c996",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374193,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "129423.0121002",
+            "liquidity_pool_id": "80b151fa9636edf021b20ab337935d0b5b5a3cb95feb4fccd7b6934f6df84cb7",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 49223458,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1000000.0000000",
+            "liquidity_pool_id": "843ff768a8e4ab5741a610f19b2c632dec95986b21855700f03ca9b511256e3f",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47870050,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2803.9793151",
+            "liquidity_pool_id": "845001f2cb2e5b99fef63ebc7ae7ce5ab16804a70cd234eeaa5bd4653ffb136f",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373812,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "22455.8035120",
+            "liquidity_pool_id": "853bfd4ba242ae293559ce9bd63a19c01c3e9ed354cfd4cdfe2778ca848805c1",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926439,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2392.6168455",
+            "liquidity_pool_id": "8577850297e99a8861f39b9651b401bd4e781bf06fa82d8c45c7c87f1b7d326f",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926397,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "34317611.7256839",
+            "liquidity_pool_id": "86458fad57a4c88c060886a6eac7faf1322ec67e3803d2a5d89cce7d092ec5b9",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47877124,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "4433480.5739960",
+            "liquidity_pool_id": "86ffabe8f4d932277611bcb663a987cda34a51cb9aa0df60fa9466cecf6261e1",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373962,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1000000.0000000",
+            "liquidity_pool_id": "8a6b1007c4c99c408a14a7bdcc56bc6e7036c346770057622f0fe64403a04135",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47870052,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "8d368b01b0874e1ac6fa5cd18af934c7c1a04f64422b0310c251045b356281a3",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374260,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "81695.6389471",
+            "liquidity_pool_id": "8f87d451bafd669dc513d5c432d17570a4bd3e485736c6137666b125bdd784a2",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926427,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1000000.0000000",
+            "liquidity_pool_id": "90115d5d06a7516f09e43d756f373a7c457ec93a49834e28bf9a899bd4544c42",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47870040,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1085.2147789",
+            "liquidity_pool_id": "929bd72bd2c54bacc9468ae058be99a8c87c8b74f5eb2027854942879d9be770",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47462018,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1000000.0000000",
+            "liquidity_pool_id": "942cf7c95b7bc1bfa206cac1deaabfbfef81c5a9b3f6a7860bfd6b029a6663b6",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47870083,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "4433484.5641267",
+            "liquidity_pool_id": "94488a98499cdfd5db04398623805e0f103f5822b8e999fec9cbabeb0cd3d640",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373985,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "80151.1756483",
+            "liquidity_pool_id": "95623439bf771d2af9f78183857e5f85ce73e0470111b0fbc1b38c7a8990ba6c",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926422,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1000000.0000000",
+            "liquidity_pool_id": "956f4a05bbe49f809bfd08c85a5502877626514e0d18d3aa8fa88128d4476de0",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47870079,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "97d949abc97e8d0ce9263648deb5b37e95333aed6b0268a412da932af6f7579d",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374187,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2204.0435713",
+            "liquidity_pool_id": "981648405e85265b71fd48389a8267063912a1e5cd287fd71ca64a166e29f7d3",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47869769,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "69025830.8810735",
+            "liquidity_pool_id": "9aad390b27f57b095d86ab5606978341cea2f02883c29292ea9719640ec5fd85",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47445828,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2803.9793151",
+            "liquidity_pool_id": "9ce499288f40182ed7e5da4e0b8360780780fa2c94128ae867228f2ad3aa088f",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373799,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "3134949.0372911",
+            "liquidity_pool_id": "a0a70a550b1d69b70d77048eadf740fc72c2784e7061c142a0c88e07075180dd",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373955,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "70710678.1186547",
+            "liquidity_pool_id": "a12796df2ee3df65cb90e4ff51439be8e163371cd5af4ade54a26e961e12f296",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47871726,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1000000.0000000",
+            "liquidity_pool_id": "a1b4ae1a37b3781d37745ac5276db6065171fa6c93525af50c89af04183d66b7",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47870062,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1000000.0000000",
+            "liquidity_pool_id": "a3170f422b6262bac525a83dfaf9528a05b221445520282b6844fca42deb82eb",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47870054,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "a44bfe2bb30c2c0d4078e4160e52ebb2bdfa988e2a5b0d3257d1c0f80b8c9efe",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374258,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "11716.3790571",
+            "liquidity_pool_id": "a59b448f5ec50d11f008a8b7cd9a655db82377f0703fd28ef238998958973336",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926445,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "10000000.0000000",
+            "liquidity_pool_id": "a5cc26a26bb887648baeb9508de47c272414e7bdfbf72bdba07b03726ae10dcb",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47888678,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "86741331.6687699",
+            "liquidity_pool_id": "ab2b3f18bee96733d54a59d86e770fa0d00701ba5a40803a06e88d5a943c051a",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47445832,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2803.9793151",
+            "liquidity_pool_id": "ab31d9a724f294b6667f659eca74596fa6408c953bc1dd66652ee70b0a6b76be",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373784,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "27042.4121741",
+            "liquidity_pool_id": "ab4a51b19e25f0790ba3844f245f0198d12c324a1b525c85097ef7a1bf023d7e",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926404,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "4433480.5739960",
+            "liquidity_pool_id": "adaed16adbf49a2be4d1bad013cc52f4c801c3a5a2e964d7778b1a8a6f2b1cb2",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373970,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "9988818.6736095",
+            "liquidity_pool_id": "af2cf807dedac7d2972dc19db0d7aa05d84ab795a6ef0b1602263e2773c3d926",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373908,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "572360.2816124",
+            "liquidity_pool_id": "b08e80ce25c6b42eb84c5ba4c45158cfc640fd8afa9b5cd2af3b60c3b3ff8207",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47870089,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "92046.9350560",
+            "liquidity_pool_id": "b10a2a6ee576460494aa35ea9685a815c024a676bacc7c5d6c4d21c7cbeeaf62",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926418,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "b1a024233213d74204f8014add4676079e7f51f84a41cac3e8b5b4af2fb9411a",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374256,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2250.2447790",
+            "liquidity_pool_id": "b27837118213ab96e6d35f668028554981aa37b0d53e3dbd77919bd791dde2c8",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373875,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "10700.0971043",
+            "liquidity_pool_id": "b566112704679df1b77db4c2c4d13d48a481e888a12f5e27436b32912cd473c4",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926454,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "88797.7136855",
+            "liquidity_pool_id": "b697344a4a2dc3d677a0d22ecd0753c7a57d11202fb341d0108ef15ee689a192",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926389,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "3158741.8143028",
+            "liquidity_pool_id": "b705fe7b58a83601747312f9b9b548d2a97990f08efb1583ab2261717afce3b1",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373957,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "26775.4352403",
+            "liquidity_pool_id": "b77690fbc6fdb740412dd38aa0f635ea0e60cf32ae44dda5763b6973742b7465",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926441,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "11119.2982474",
+            "liquidity_pool_id": "b8ad9aa92c4b9f7fa962f8d3b41d2cbcab79b16a2013c8e1a6ab198e4434c6b8",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926409,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "136537208.7497032",
+            "liquidity_pool_id": "ba856b459eb64d30043b9ceaf853659426430634ed40cad12da9d669995f3545",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 49223465,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "12585.5573866",
+            "liquidity_pool_id": "bb150f68f68672a173293184461f01a8139d6038cb99f006e084bddcded3308e",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926399,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "495678.7026104",
+            "liquidity_pool_id": "bb59898d100113794b667cf34fd26a44fb4598ec7d90a8728762221805b2b3d2",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47870064,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2216742.5480720",
+            "liquidity_pool_id": "bcbc2f841a3ae7cce7521c648d4943b61d392afd64ac76a7b2b80543e296333f",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373953,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "85711072.6878236",
+            "liquidity_pool_id": "bd11296fbafd0a37c942fc5531544e96bc1056efff8e65b28ec01f17fc5cacfe",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47445841,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "6750.3283823",
+            "liquidity_pool_id": "c13e974ff006f4369671d4dfb9e0d9863adf55c6300b0043e2de7a519963f5c7",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47888673,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "c161d0746060bccc43f539b2bc35295a9274ea37329c172dac75a683973552b7",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374262,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "198.9176804",
+            "liquidity_pool_id": "c1c595c3b820579101096a42159b04ef934a5727ba7c5e871ff9985b6a68803a",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47871729,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "11155918.5900528",
+            "liquidity_pool_id": "c44e85f51ddd4506b1d659d445ebb37070169d5bf1e4d789082fed443a731a80",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47877177,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "6542738.2919474",
+            "liquidity_pool_id": "c4e67a9acd4c616318df60616291a0c39e9d933e48a2e1e3caefdd5ff005b0d8",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373911,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "27178.8028323",
+            "liquidity_pool_id": "c67c135f7826485605d9c7474036112392b2b146f34c738438e784079d4c425e",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926420,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "10640.1386336",
+            "liquidity_pool_id": "cd266294af29287418f75fef148199169ab84c83265efb91073977ca477fa6c9",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926453,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "6527124.2502856",
+            "liquidity_pool_id": "cef08c5239afba15709b6a67b43bdc7a313611ad055c8ae8eb4cbd7e423d46f0",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47877250,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "7009955.4381126",
+            "liquidity_pool_id": "d0853b12e77c27eb7341c34ba4d231b98cefdc14ee657b502bfae6c0820fbba4",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373904,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "82564.9459410",
+            "liquidity_pool_id": "d20b4c2728623603a860847d80576427566abe6701fc5891c26aabc317a31fea",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926383,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "41565708.2465195",
+            "liquidity_pool_id": "d4315ef354c7686fa41dafd1fc94e526ce345c06d7e45e66d460645971451771",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47877182,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "319.7726107",
+            "liquidity_pool_id": "d7389452c1113051a127399cf89e4f00bf3cf54c30fefcbb8ef5c12916513b0e",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926354,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "4433480.5739960",
+            "liquidity_pool_id": "d79dd787d49399961ebb7d84b7a03d5bd1dfba86d2b84525e8f2d3c7da209a77",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373968,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "4433480.5739960",
+            "liquidity_pool_id": "da6367e0492c71cd002fa4540a730d2206080d78270eee3114a6fc6fc22b9db4",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373966,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "da6c5edc52a8049c2b07d7d4b08021615b850daa1fd1bc2e04f68e549822c8f8",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374266,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "db038478814133093d54b1eb8fee1be52b71f84bc3364c818afe1cfedd6c087b",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374277,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "69115812.5139252",
+            "liquidity_pool_id": "dc688d7a8ff2c773f6c244da540aa15e2a5601ecff1e8d7879dca0746b6ffbfe",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47445845,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "69181738.5118286",
+            "liquidity_pool_id": "def7c96d473fc518856d6e8a3ab3d0bc914bea15fa35e9b9ea044a38e6ae1076",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47445843,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "85130819.8508749",
+            "liquidity_pool_id": "e0991679dc4530fab403dacb8905668b57a4e2db552f49914bf5942666887b14",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47445826,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "4437471.1273145",
+            "liquidity_pool_id": "e1587b18366734017185a818e78e16559387b5ab58163a91df80549be40db285",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373987,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "58.3607800",
+            "liquidity_pool_id": "e1d6ef17fe151e228ea8d9cbca64efcd7dd562dec953f6079d5552f8a7ee9be6",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926350,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "71397.7327868",
+            "liquidity_pool_id": "e4697546499a0845e850808419bbe20aca149f1fb3dd93930090e37d860f2f52",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926458,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "30000000.0000000",
+            "liquidity_pool_id": "e59b94418b0caec26d13e1d5547c02a5b2f99591be1c9330ae82f3a25bff3885",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47462023,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "e7e7ac387438b4182ff442af8d0dd421a9c6c84ecbf3238f6ffd4b5b81c58ab1",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374191,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "4433480.5739960",
+            "liquidity_pool_id": "ea995a6e9691cf073c5dd3005fdbf878bd0dc31f1e46b8d1f6dbb18c169dc36d",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373974,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "72394367.5720279",
+            "liquidity_pool_id": "eb5e67106c04cacf4bee68b6c062c3e356f714546c77d370cdc3e8b7932ec914",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47445847,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "3000000.0000000",
+            "liquidity_pool_id": "ed76a7f80d9a39596f933676fb4cac30c612efcee348a979178ebd865135b0b8",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47787604,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "83244.7197411",
+            "liquidity_pool_id": "ee81a3e1d0caf2d10fe7e8e80a15e9878cea774acd3b5f067f8c5366e9da147d",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926431,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2645751.3110645",
+            "liquidity_pool_id": "eea7a3932fecc202b8e595714bfc9a882ed8d8b3c797e50ce9561175a5237b74",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47869785,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "4433480.5739960",
+            "liquidity_pool_id": "eeaf3e56a499b65a3ca9ae486dc212c6b46b008b999bfa5fdaa42c35de0f97e6",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373960,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2803.9793151",
+            "liquidity_pool_id": "eebc82ea64c9366a75d297994a53cace3ea08baff776fb1536823e63bdaa8a54",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373797,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "100000.0000000",
+            "liquidity_pool_id": "f1bd6be2adc220dfa6946d15b46fe1f982a51b544a273789fec00a615e7bb77e",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47374228,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1000000.0000000",
+            "liquidity_pool_id": "f41609603f2401cf55bf39385ee2c67cadfc03f80cbcfcbb43b0b96afaca9b11",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47870075,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "74159.3000228",
+            "liquidity_pool_id": "f8d282e2a95d55bfff6c189920ebee139f2b94feab4d03795be35c9147c3db20",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 48926377,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "2803.9793151",
+            "liquidity_pool_id": "fad4d915f49ef8692f85e7142cacf054c1780b56200602603b08df2cbca23412",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373806,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "87399080.0717539",
+            "liquidity_pool_id": "fc063f9dd86b89b99a3e47325fa7e3a3fd292ba0b9e1d21baef3a91696a48287",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47445851,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1411.4095054",
+            "liquidity_pool_id": "fed3f9f01957b0e205eb995f8a70a30c85628da8cba21822292b52a69cf7c2cd",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47373824,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "1000000.0000000",
+            "liquidity_pool_id": "ff928ed2ee32872a33993dc3aa97ddf634fcd8972b1190154f23d37f8bebf499",
+            "limit": "922337203685.4775807",
+            "last_modified_ledger": 47870081,
+            "is_authorized": false,
+            "is_authorized_to_maintain_liabilities": false,
+            "asset_type": "liquidity_pool_shares"
+          },
+          {
+            "balance": "3959.7274756",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "0.0000000",
+            "selling_liabilities": "2959.7274756",
+            "last_modified_ledger": 51147083,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum4",
+            "asset_code": "AQUA",
+            "asset_issuer": "GBNZILSTVQZ4R7IKQDGHYGY2QXL5QOFJYQMXPKWRRM5PAV7Y4M67AQUA"
+          },
+          {
+            "balance": "3273089.0061887",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "105724600340.0000000",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928312,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "CNGOLDBRIDGE",
+            "asset_issuer": "GAUCPLSPBJKOSN7WZK6SDD2BYPQMC3YSWMLX4XXY7S4JPQFLJXEINDUS"
+          },
+          {
+            "balance": "700000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928314,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK001",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "700000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928315,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK002",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "10000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928317,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK003",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "700000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928318,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK004",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "1000000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928320,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK005",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "4000000.0000001",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 49223476,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK006",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "10000000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928323,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK007",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "40000000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928325,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK008",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "1000000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928326,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK009",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "40000000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928328,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK010",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "40000000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928330,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK011",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "30000000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928331,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK012",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "40139048.4999264",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928333,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK013",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "1000000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928335,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK014",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "40000000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928336,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK015",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "1000000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928338,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK016",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "10805.9729328",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928340,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK017",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "40000000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928342,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK018",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "1000000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928343,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK019",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "1000000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48928345,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDBANK020",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "3687112.7846870",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "0.0000000",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48926420,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "GOLDNOTEDE",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "989958.5905496",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "0.0000000",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48926395,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "INDUSXGOLD",
+            "asset_issuer": "GAUCPLSPBJKOSN7WZK6SDD2BYPQMC3YSWMLX4XXY7S4JPQFLJXEINDUS"
+          },
+          {
+            "balance": "6879916.9995990",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "0.0000000",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 47373871,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "INDUSXIPAY",
+            "asset_issuer": "GAUCPLSPBJKOSN7WZK6SDD2BYPQMC3YSWMLX4XXY7S4JPQFLJXEINDUS"
+          },
+          {
+            "balance": "5671340.2920367",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "0.0000000",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48926439,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "INDUSXLM",
+            "asset_issuer": "GAUCPLSPBJKOSN7WZK6SDD2BYPQMC3YSWMLX4XXY7S4JPQFLJXEINDUS"
+          },
+          {
+            "balance": "1000347.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "0.0000000",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 47431710,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "QLUMEN",
+            "asset_issuer": "GARAVAA4B373JSRQA3VKPL2KMGNO6GUCYS2CVFPRD2PJJ2N36ONAP5UI"
+          },
+          {
+            "balance": "12435190.5845146",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "0.0000000",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 49223473,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "RUGOLDBRIDGE",
+            "asset_issuer": "GAUCPLSPBJKOSN7WZK6SDD2BYPQMC3YSWMLX4XXY7S4JPQFLJXEINDUS"
+          },
+          {
+            "balance": "6764346.6952504",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "0.0000000",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48926447,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "USGOLDBRIDGE",
+            "asset_issuer": "GAUCPLSPBJKOSN7WZK6SDD2BYPQMC3YSWMLX4XXY7S4JPQFLJXEINDUS"
+          },
+          {
+            "balance": "13110.5386832",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "0.0000000",
+            "selling_liabilities": "9460.9160834",
+            "last_modified_ledger": 49223458,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "WGUARDIAN",
+            "asset_issuer": "GBYBVWOOVC4EJVRIF4HMWG5B7POLCS7JRPY5KYR3BCLEK24IJQOGUARD"
+          },
+          {
+            "balance": "2282789.6649965",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "858993459600.0000000",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48926407,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "XLMBANK1",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "455825.8005227",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "858993459600.0000000",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48926445,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "XLMBANK2",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "3794872.3566374",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "840000000000.0000000",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48926347,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "XLMBANK3",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "9691302.8155356",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48926375,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "XLMBRIDGE",
+            "asset_issuer": "GAUCPLSPBJKOSN7WZK6SDD2BYPQMC3YSWMLX4XXY7S4JPQFLJXEINDUS"
+          },
+          {
+            "balance": "1000000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48926404,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "XLMBRIDGE1",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "1000000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48926391,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "XLMBRIDGE2",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "1000000.0000000",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "0.0000000",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48926433,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "XLMBRIDGE3",
+            "asset_issuer": "GDEUQ2MX3YXMITFOTC3CO3GW5V3XE3IVG7JKLZZAOZ7WFYIN256INDUS"
+          },
+          {
+            "balance": "407849220.6634603",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "0.0000000",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 49223465,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "XLMGOLD",
+            "asset_issuer": "GAUCPLSPBJKOSN7WZK6SDD2BYPQMC3YSWMLX4XXY7S4JPQFLJXEINDUS"
+          },
+          {
+            "balance": "7396331.2426956",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "0.0000000",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48926378,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "XLMSILVER",
+            "asset_issuer": "GAUCPLSPBJKOSN7WZK6SDD2BYPQMC3YSWMLX4XXY7S4JPQFLJXEINDUS"
+          },
+          {
+            "balance": "5304278.4495165",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "0.0000000",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48926441,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "XLMWRAPPED",
+            "asset_issuer": "GAUCPLSPBJKOSN7WZK6SDD2BYPQMC3YSWMLX4XXY7S4JPQFLJXEINDUS"
+          },
+          {
+            "balance": "36139524.5431883",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "902337203579.1590880",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 48926409,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "XRPBRIDGE",
+            "asset_issuer": "GAUCPLSPBJKOSN7WZK6SDD2BYPQMC3YSWMLX4XXY7S4JPQFLJXEINDUS"
+          },
+          {
+            "balance": "11477187.5712970",
+            "limit": "922337203685.4775807",
+            "buying_liabilities": "0.0000000",
+            "selling_liabilities": "0.0000000",
+            "last_modified_ledger": 49223476,
+            "is_authorized": true,
+            "is_authorized_to_maintain_liabilities": true,
+            "asset_type": "credit_alphanum12",
+            "asset_code": "XRPIPAY",
+            "asset_issuer": "GAUCPLSPBJKOSN7WZK6SDD2BYPQMC3YSWMLX4XXY7S4JPQFLJXEINDUS"
+          },
+          {
+            "balance": "206.2176154",
+            "buying_liabilities": "0.0000000",
+            "selling_liabilities": "0.0000000",
+            "asset_type": "native"
+          }
+        ],
+        "signers": [
+          {
+            "weight": 1,
+            "key": "GDVHNSHOVDFR755ZRO6SLKXFQQC3ADLY4A2I6ILHNMKFCEWD5HXW7PY2",
+            "type": "ed25519_public_key"
+          }
+        ],
+        "data": {},
+        "num_sponsoring": 0,
+        "num_sponsored": 0,
+        "paging_token": "GDVHNSHOVDFR755ZRO6SLKXFQQC3ADLY4A2I6ILHNMKFCEWD5HXW7PY2"
+      }
+    ]
+  }
+}
