@@ -237,6 +237,49 @@ no float appears in the path.
 
 ---
 
+## 8. Dust trades, and why drawdown needed protecting from them
+
+Section 7 verified the series points the right way. It says nothing about
+whether every observation in it is a price, and one class of them is not.
+
+Stellar stores amounts as integers of 1e-7. A swap of **one stroop for one
+stroop** reports `price` as the rational `1/1`, so the observation comes back as
+exactly 1 no matter what the pool is actually worth. The rational cannot express
+the price at that resolution.
+
+This was found by disbelieving a number rather than by testing for it. The worst
+drawdown across the in-scope population was **-99.98%**, on the native/LUSD pool:
+
+| | |
+|---|---|
+| Pool trades near | `5958` (its reserve ratio) |
+| Series | `5986.7` → peak `6019.7` → **trough `1`** → `5938.3` |
+| Offending trade | `275999958560165889-0`, 2026-09-03T23:17:47Z |
+| Base amount | `0.0000001` XLM |
+| Counter amount | `0.0000001` LUSD |
+| Reported price | `n/d` = `1/1` = **1** |
+
+Drawdown is maximally sensitive to a single outlier — it is a max over the
+series — so one such trade is enough to destroy the figure, and the result was
+plausible-looking enough to publish.
+
+**The fix, and where it lives.** Trades now carry their base and counter amounts
+through ingestion, and the metrics layer excludes observations where either side
+is at the resolution floor. Ingestion records what the ledger said and filters
+nothing; the judgement about which observations are informative belongs in the
+metrics layer, where the threshold is visible and testable rather than buried in
+a fetch. `price_series_for(drop_dust=False)` still returns the raw series and
+`dust_count` reports what was removed, so the filter can always be audited.
+
+The threshold is the floor itself, not a round number above it. Excluding a
+genuinely small but well-formed trade would be discarding real data to tidy a
+chart; what is excluded is only the range where the rational cannot express a
+price. A trade with no recorded amounts — from runs made before amounts were
+carried — is not treated as dust, because absent information must not
+masquerade as a judgement. All three cases are tested.
+
+---
+
 ## What is *not* verified here
 
 - **No metric is checked against a live Horizon computation**, because Horizon
@@ -256,5 +299,7 @@ no float appears in the path.
 - **Realised volatility and drawdown were, until trade ingestion existed, only
   checked against constructed series**, because a census gives one price per
   pool and one point has no variance. `cmd/ingest -trades N` now builds a real
-  price series per pool, and the normalisation that makes it meaningful is
-  itself verified against an independent measurement — see below.
+  price series per pool, the normalisation that makes it meaningful is itself
+  verified against an independent measurement (section 7), and the observations
+  are filtered for a quantisation artefact that would otherwise ruin drawdown
+  (section 8).
