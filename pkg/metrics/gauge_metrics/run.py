@@ -32,6 +32,21 @@ class Pool:
         return self.reserve_a == 0 and self.reserve_b == 0
 
 
+# Amounts at or below this are at the ledger's resolution floor, where a
+# reported price stops carrying information.
+#
+# Stellar stores amounts as integers of 1e-7. A swap of one stroop for one
+# stroop reports price 1/1 = 1 no matter what the pool is actually worth, and a
+# swap of one stroop for two reports 2. These are quantisation artefacts, not
+# prices.
+#
+# The threshold is deliberately at the floor itself rather than at some round
+# number above it: excluding a genuinely small but well-formed trade would be
+# discarding real data to tidy a chart. What is excluded here is only the range
+# where the rational cannot express the price.
+DUST_THRESHOLD = Decimal("0.0000010")
+
+
 @dataclass(frozen=True)
 class Trade:
     """One price observation, normalised to the pool's A-in-B direction."""
@@ -40,6 +55,21 @@ class Trade:
     id: str
     close_time: str
     price_a_in_b: Decimal
+    base_amount: Decimal = Decimal(0)
+    counter_amount: Decimal = Decimal(0)
+
+    @property
+    def is_dust(self) -> bool:
+        """Whether either side is small enough that the price is meaningless.
+
+        A trade with no recorded amounts (older run files) is not treated as
+        dust: absent information must not masquerade as a judgement.
+        """
+        if self.base_amount == 0 and self.counter_amount == 0:
+            return False
+        return (
+            self.base_amount <= DUST_THRESHOLD or self.counter_amount <= DUST_THRESHOLD
+        )
 
 
 @dataclass(frozen=True)
@@ -82,16 +112,34 @@ class Run:
     # from having a flat one.
     trades: dict[str, list[Trade]]
 
-    def price_series_for(self, pool_id: str) -> list[Decimal]:
-        """Prices for a pool, oldest first.
+    def price_series_for(
+        self, pool_id: str, *, drop_dust: bool = True
+    ) -> list[Decimal]:
+        """Prices for a pool, oldest first, dust excluded by default.
 
         Ordered by close time rather than by the order Horizon returned them:
         the trade walk fetches newest-first and pages backwards, so the raw file
         is in descending time. Feeding that to a drawdown calculation would
         measure the series running backwards, which reports the recovery as the
         decline.
+
+        Dust is excluded because a stroop-for-stroop swap reports a price of
+        exactly 1 regardless of the pool's real price. Drawdown is maximally
+        sensitive to a single outlier, so one such trade is enough to ruin it:
+        in the native/LUSD pool, which trades near 5958, a single one-stroop
+        trade produced a reported peak-to-trough of -99.98%.
+
+        Pass ``drop_dust=False`` to see the unfiltered series, which is what the
+        dust_count comparison in the survey is built from.
         """
-        return [t.price_a_in_b for t in self.trades.get(pool_id, [])]
+        trades = self.trades.get(pool_id, [])
+        if drop_dust:
+            trades = [t for t in trades if not t.is_dust]
+        return [t.price_a_in_b for t in trades]
+
+    def dust_count(self, pool_id: str) -> int:
+        """Trades excluded from this pool's series as unpriceable."""
+        return sum(1 for t in self.trades.get(pool_id, []) if t.is_dust)
 
     def pool_for(self, pool_id: str) -> Pool | None:
         """The most contemporaneous pool state available for a position."""
@@ -159,6 +207,9 @@ def load(directory: str | Path) -> Run:
                     id=row["id"],
                     close_time=row["close_time"],
                     price_a_in_b=dec(row["price_a_in_b"]),
+                    # Absent in runs recorded before amounts were carried.
+                    base_amount=dec(row.get("base_amount", "0")),
+                    counter_amount=dec(row.get("counter_amount", "0")),
                 )
             )
     # Oldest first. See price_series_for.

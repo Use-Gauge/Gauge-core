@@ -12,6 +12,7 @@ from decimal import Decimal as D
 
 from gauge_metrics.cli import HISTORY_ELDER_LEDGER, fmt, in_scope, main
 from gauge_metrics.run import load
+from gauge_metrics.series import max_drawdown
 
 
 def write_run(tmp_path, *, pools, positions, at_attribution=None, trades=None):
@@ -202,3 +203,94 @@ def test_trades_are_ordered_oldest_first_regardless_of_file_order(tmp_path):
         tmp_path, pools=pools, positions=[], at_attribution=pools, trades=trades
     )
     assert load(d).price_series_for("p") == [D("2.0"), D("1.0")]
+
+
+def trade(pid, tid, minute, price, base="10", counter="10"):
+    return {
+        "pool_id": pid,
+        "id": tid,
+        "close_time": f"2026-09-06T00:{minute:02d}:00Z",
+        "price_a_in_b": price,
+        "base_amount": base,
+        "counter_amount": counter,
+    }
+
+
+def test_a_single_dust_trade_does_not_destroy_the_drawdown(tmp_path):
+    """The native/LUSD case, reduced.
+
+    A swap of one stroop for one stroop reports a price of exactly 1 whatever
+    the pool is worth, because both sides are at the ledger's 1e-7 floor and the
+    rational degenerates. Drawdown is maximally sensitive to a single outlier,
+    so one such trade took a pool trading near 5958 to a reported -99.98%.
+    """
+    pools = [pool("p", trustlines=2)]
+    trades = [
+        trade("p", "t1", 1, "5986.7"),
+        trade("p", "t2", 2, "6019.7"),
+        # One stroop for one stroop: price 1, and meaningless.
+        trade("p", "t3", 3, "1", base="0.0000001", counter="0.0000001"),
+        trade("p", "t4", 4, "5938.3"),
+    ]
+    d = write_run(
+        tmp_path, pools=pools, positions=[], at_attribution=pools, trades=trades
+    )
+    run = load(d)
+
+    assert run.dust_count("p") == 1
+
+    clean = run.price_series_for("p")
+    assert D("1") not in clean
+    assert len(clean) == 3
+    # Real peak-to-trough over the surviving observations, not -99.98%.
+    assert max_drawdown(clean).max_drawdown > D("-0.02")
+
+    raw = run.price_series_for("p", drop_dust=False)
+    assert len(raw) == 4
+    assert max_drawdown(raw).max_drawdown < D("-0.99")
+
+
+def test_a_small_but_well_formed_trade_is_kept(tmp_path):
+    """Only the range where the rational cannot express a price is excluded.
+
+    Discarding genuinely small trades would be throwing away real data to tidy
+    a chart.
+    """
+    pools = [pool("p", trustlines=2)]
+    trades = [
+        trade("p", "t1", 1, "100"),
+        trade("p", "t2", 2, "101", base="0.001", counter="0.101"),
+        trade("p", "t3", 3, "99"),
+    ]
+    d = write_run(
+        tmp_path, pools=pools, positions=[], at_attribution=pools, trades=trades
+    )
+    run = load(d)
+    assert run.dust_count("p") == 0
+    assert len(run.price_series_for("p")) == 3
+
+
+def test_trades_without_amounts_are_not_treated_as_dust(tmp_path):
+    """Runs recorded before amounts were carried have none. Absent information
+    must not masquerade as a judgement."""
+    pools = [pool("p", trustlines=2)]
+    trades = [
+        {
+            "pool_id": "p",
+            "id": "t1",
+            "close_time": "2026-09-06T00:01:00Z",
+            "price_a_in_b": "100",
+        },
+        {
+            "pool_id": "p",
+            "id": "t2",
+            "close_time": "2026-09-06T00:02:00Z",
+            "price_a_in_b": "90",
+        },
+    ]
+    d = write_run(
+        tmp_path, pools=pools, positions=[], at_attribution=pools, trades=trades
+    )
+    run = load(d)
+    assert run.dust_count("p") == 0
+    assert len(run.price_series_for("p")) == 2

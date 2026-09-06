@@ -19,6 +19,21 @@ type Trade struct {
 	// CloseTime is when the containing ledger closed.
 	CloseTime string `json:"close_time"`
 
+	// BaseAmount and CounterAmount are the two sides of the swap, as the ledger
+	// recorded them.
+	//
+	// Carried because the price alone cannot say whether it means anything. A
+	// swap of one stroop for one stroop reports a price of exactly 1 whatever
+	// the pool is really worth — both sides are at the 1e-7 floor and the
+	// rational degenerates. One such trade in the native/LUSD pool, which trades
+	// near 5958, produced a reported drawdown of -99.98%.
+	//
+	// Ingestion records what the ledger said and does not filter. Deciding
+	// which observations are informative is the metrics layer's job, where the
+	// threshold is visible and testable rather than buried in a fetch.
+	BaseAmount    decimal.Decimal `json:"base_amount"`
+	CounterAmount decimal.Decimal `json:"counter_amount"`
+
 	// PriceAInB is the pool price of the pool's first reserve asset denominated
 	// in its second, normalised so that every observation in a series points the
 	// same way. Horizon reports each trade from the taker's side, so base and
@@ -77,11 +92,18 @@ func (r rawTrade) toTrade(poolID, assetA string) (Trade, error) {
 		price = d.Div(n)
 	}
 
+	// Amounts are informational and must not fail a trade that has a usable
+	// price, so a parse failure leaves them zero rather than discarding the row.
+	base, _ := decimal.NewFromString(r.BaseAmount)
+	counter, _ := decimal.NewFromString(r.CounterAmount)
+
 	return Trade{
-		PoolID:    poolID,
-		ID:        r.ID,
-		CloseTime: r.LedgerCloseTime,
-		PriceAInB: price,
+		PoolID:        poolID,
+		ID:            r.ID,
+		CloseTime:     r.LedgerCloseTime,
+		BaseAmount:    base,
+		CounterAmount: counter,
+		PriceAInB:     price,
 	}, nil
 }
 

@@ -1,75 +1,162 @@
-"""Sample test: for positions whose balance moved inside Horizon's retention
-window, does the account's in-window effect history fully explain the balance?
+"""Do positions that moved recently actually have a recoverable entry basis?
 
-If sum(shares_received) - sum(shares_redeemed) over the window equals the
-current balance, the position began at zero inside the window and its entry
-basis is completely recoverable. If it does not, the position predates the
-window and only a partial history exists.
+Horizon retains 365 days of history (`history_elder_ledger` 57,993,841 as of
+2026-09-06). A position whose balance last changed before that boundary has no
+recoverable cost basis at all — the history is gone.
+
+The positions that moved *after* it are an upper bound on what is recoverable,
+not a count: a balance that moved recently can belong to a position opened years
+ago and merely topped up since.
+
+This script distinguishes the two. For a sampled position it sums the account's
+in-window `liquidity_pool_deposited` and `liquidity_pool_withdrew` effects for
+that pool. If the net equals the current balance, the position began at zero
+inside the window and its entry basis is complete. If it does not, part of the
+position predates the window and only a partial history exists.
+
+    python3 scripts/entry-basis-sample.py <run-directory> [sample-size]
+
+The sample is seeded, so a rerun over the same run examines the same positions.
 """
-import json, random, urllib.request, sys
+
+from __future__ import annotations
+
+import json
+import random
+import sys
+import urllib.request
 from decimal import Decimal
-from collections import defaultdict
 
-ELDER = 57993841
-D = 'data/runs/20260906T063725Z'
-SAMPLE = int(sys.argv[1]) if len(sys.argv) > 1 else 60
+# Horizon's retention boundary, observed on horizon.stellar.org 2026-09-06.
+ELDER_LEDGER = 57993841
 
-pools = {}
-for l in open(D + '/pools.jsonl'):
-    p = json.loads(l); pools[p['id']] = p
-scope = {p['id'] for p in pools.values()
-         for r in p['reserves']
-         if r['asset'] == 'native' and Decimal(r['amount']) >= 1000 and p['total_trustlines'] > 1}
+# Minimum XLM on a native leg for a pool to be in scope. The survey's threshold;
+# a judgement, not a finding.
+MIN_XLM = Decimal(1000)
 
-cands = []
-for l in open(D + '/positions.jsonl'):
-    s = json.loads(l)
-    if s['pool_id'] in scope and Decimal(s['shares']) > 0 and s['last_modified_ledger'] >= ELDER:
-        cands.append(s)
+# How deep to walk an account's effects before giving up. A cap is necessary —
+# some accounts have very long histories — and positions unresolved within it
+# are reported as inconclusive rather than counted either way.
+MAX_PAGES = 25
 
-random.seed(20260906)
-sample = random.sample(cands, min(SAMPLE, len(cands)))
-print(f"candidates: {len(cands)}   sampling: {len(sample)}\n")
+SEED = 20260906
 
-def get(u):
-    for _ in range(4):
+
+def fetch(url: str, attempts: int = 4) -> dict | None:
+    """GET with retries. The accounts endpoint returns 503 under load."""
+    for _ in range(attempts):
         try:
-            return json.load(urllib.request.urlopen(u, timeout=30))
+            with urllib.request.urlopen(url, timeout=30) as response:
+                return json.load(response)
         except Exception:
-            pass
+            continue
     return None
 
-complete = partial = nodata = 0
-for i, s in enumerate(sample, 1):
-    acct, pid = s['account_id'], s['pool_id']
-    bal = Decimal(s['shares'])
-    url = f"https://horizon.stellar.org/accounts/{acct}/effects?limit=200&order=desc"
-    net = Decimal(0); seen = 0; pages = 0; reached_elder = False
-    while url and pages < 25:
-        d = get(url)
-        if d is None: break
-        recs = d['_embedded']['records']
-        if not recs: break
-        pages += 1
-        for r in recs:
-            lp = r.get('liquidity_pool') or {}
-            if lp.get('id') != pid: continue
-            if r['type'] == 'liquidity_pool_deposited':
-                net += Decimal(r.get('shares_received', '0')); seen += 1
-            elif r['type'] == 'liquidity_pool_withdrew':
-                net -= Decimal(r.get('shares_redeemed', '0')); seen += 1
-        url = d['_links']['next']['href']
-    if seen == 0:
-        nodata += 1; verdict = "no in-window events"
-    elif net == bal:
-        complete += 1; verdict = "COMPLETE (opened in-window)"
-    else:
-        partial += 1; verdict = f"partial (net {net} vs balance {bal})"
-    if i <= 12 or verdict.startswith("COMPLETE"):
-        print(f"  {i:>3}. {acct[:10]}… {pid[:10]}… events={seen:<3} {verdict}")
 
-n = len(sample)
-print(f"\n=== result over {n} sampled in-window positions ===")
-print(f"  entry basis COMPLETE (position opened inside the window): {complete} ({Decimal(complete)*100/n:.1f}%)")
-print(f"  partial history only (predates the window):               {partial} ({Decimal(partial)*100/n:.1f}%)")
-print(f"  no liquidity events found in 25 pages:                    {nodata} ({Decimal(nodata)*100/n:.1f}%)")
+def in_scope_pools(run_dir: str) -> set[str]:
+    scope = set()
+    with open(f"{run_dir}/pools.jsonl") as handle:
+        for line in handle:
+            pool = json.loads(line)
+            if pool["total_trustlines"] <= 1:
+                continue
+            for reserve in pool["reserves"]:
+                if reserve["asset"] == "native" and Decimal(reserve["amount"]) >= MIN_XLM:
+                    scope.add(pool["id"])
+                    break
+    return scope
+
+
+def candidates(run_dir: str, scope: set[str]) -> list[dict]:
+    """Positions in scope, non-zero, whose balance moved inside the window."""
+    out = []
+    with open(f"{run_dir}/positions.jsonl") as handle:
+        for line in handle:
+            position = json.loads(line)
+            if position["pool_id"] not in scope:
+                continue
+            if Decimal(position["shares"]) <= 0:
+                continue
+            if position["last_modified_ledger"] < ELDER_LEDGER:
+                continue
+            out.append(position)
+    return out
+
+
+def net_in_window(account: str, pool_id: str) -> tuple[Decimal, int]:
+    """Net shares deposited minus redeemed for this pool, within the window."""
+    url = (
+        f"https://horizon.stellar.org/accounts/{account}"
+        f"/effects?limit=200&order=desc"
+    )
+    net = Decimal(0)
+    events = 0
+    for _ in range(MAX_PAGES):
+        page = fetch(url)
+        if page is None:
+            break
+        records = page["_embedded"]["records"]
+        if not records:
+            break
+        for record in records:
+            pool = record.get("liquidity_pool") or {}
+            if pool.get("id") != pool_id:
+                continue
+            if record["type"] == "liquidity_pool_deposited":
+                net += Decimal(record.get("shares_received", "0"))
+                events += 1
+            elif record["type"] == "liquidity_pool_withdrew":
+                net -= Decimal(record.get("shares_redeemed", "0"))
+                events += 1
+        url = page["_links"]["next"]["href"]
+    return net, events
+
+
+def main(argv: list[str]) -> int:
+    if not argv:
+        print(__doc__)
+        return 2
+    run_dir = argv[0]
+    sample_size = int(argv[1]) if len(argv) > 1 else 25
+
+    scope = in_scope_pools(run_dir)
+    pool_of_interest = candidates(run_dir, scope)
+    if not pool_of_interest:
+        print("no candidate positions in this run")
+        return 1
+
+    random.seed(SEED)
+    sample = random.sample(pool_of_interest, min(sample_size, len(pool_of_interest)))
+    print(f"candidates: {len(pool_of_interest)}   sampling: {len(sample)}\n")
+
+    complete = partial = inconclusive = 0
+    for index, position in enumerate(sample, 1):
+        account = position["account_id"]
+        pool_id = position["pool_id"]
+        balance = Decimal(position["shares"])
+
+        net, events = net_in_window(account, pool_id)
+        if events == 0:
+            inconclusive += 1
+            verdict = f"inconclusive (no events within {MAX_PAGES} pages)"
+        elif net == balance:
+            complete += 1
+            verdict = "COMPLETE (opened in-window)"
+        else:
+            partial += 1
+            verdict = f"partial (net {net} vs balance {balance})"
+        print(f"  {index:>3}. {account[:10]}… {pool_id[:10]}… events={events:<3} {verdict}")
+
+    total = len(sample)
+    print(f"\n=== result over {total} sampled in-window positions ===")
+    for label, count in (
+        ("complete (entry basis recoverable)", complete),
+        ("partial (predates the window)", partial),
+        ("inconclusive (walk limit reached)", inconclusive),
+    ):
+        print(f"  {label:<38} {count:>3} ({Decimal(count) * 100 / total:.1f}%)")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
