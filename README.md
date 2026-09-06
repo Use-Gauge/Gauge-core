@@ -14,10 +14,20 @@ fraud detection on the same pools, and why the difference matters.
 
 ## Status
 
-Early. This repository is at the ingest-and-survey stage: it fetches real pool
-and position data and characterises the population. No metrics are implemented
-yet, deliberately — a metric computed over a population nobody has described is
-decorative. `docs/data-survey.md` comes first.
+Early, and deliberately so. This repository is at the ingest-and-survey stage:
+it fetches real pool and position data and characterises the population. No
+metrics are implemented yet — a metric computed over a population nobody has
+described is decorative, so [the survey](docs/data-survey.md) came first.
+
+What the survey found, in three lines:
+
+- There are **39,833** AMM pools on Stellar mainnet. One of them holds **54.37%**
+  of all pooled XLM.
+- Filtering to pools with enough value to matter *and* more than one holder
+  leaves **208 pools** — 0.52% of the population.
+- **3.86%** of the monetary values in the census do not survive a `float64`
+  round trip, which is why the decimal rule below is enforced by CI rather than
+  by good intentions.
 
 ## Invariants
 
@@ -35,10 +45,22 @@ make race    # the test suite as CI runs it
 make help    # all targets
 ```
 
+## Reproducing the survey
+
+```sh
+./bin/ingest -out data/runs            # the pool census: ~200 requests, ~60s
+./bin/ingest -out data/runs -holders   # plus position attribution: slow
+./bin/survey data/runs/<run>           # the figures in docs/data-survey.md
+```
+
+Ingested runs are not committed by default — they are large and reproducible
+from the commands above.
+
 ## Documentation
 
 | Document | What it is |
 |---|---|
+| [docs/data-survey.md](docs/data-survey.md) | What is actually in the data. The document everything else rests on |
 | [docs/positioning.md](docs/positioning.md) | What Gauge measures that adjacent projects do not, with the evidence |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to contribute, and what is maintainer-owned |
 
