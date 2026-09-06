@@ -74,6 +74,12 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="every pool with positions, not just the in-scope population",
     )
+    ap.add_argument(
+        "--sort",
+        choices=["value", "pool"],
+        default="value",
+        help="order rows by position size (default) or group by pool",
+    )
     args = ap.parse_args(argv)
 
     run = load(args.run)
@@ -130,6 +136,16 @@ def main(argv: list[str] | None = None) -> int:
     rows = 0
     stats = {"with_entry": 0, "no_entry": 0}
 
+    # Ordering by position size by default rather than by pool id. Pool id is
+    # a hash, so grouping by it puts an arbitrary pool at the top of the table
+    # and buries the positions that carry the most capital. The survey's whole
+    # point is that size is distributed extremely unevenly, and a table that
+    # ignores that misrepresents the population as flat.
+    #
+    # Rows are built first and printed after, because sorting by claim value
+    # needs the value computed.
+    built: list[tuple[Decimal, str]] = []
+
     for pool_id in sorted(by_pool):
         pool = run.pool_for(pool_id)
         if pool is None or pool.is_drained:
@@ -175,7 +191,7 @@ def main(argv: list[str] | None = None) -> int:
                 reserve_b=pool.reserve_b,
             )
 
-            print(
+            line = (
                 f"{short(pos.account_id):<11} {short(pool.id):<11} "
                 f"{asset_name(pool.asset_a) + '/' + asset_name(pool.asset_b):<18} "
                 f"{fmt(c.pool_fraction * 100, 4):>9} "
@@ -186,11 +202,25 @@ def main(argv: list[str] | None = None) -> int:
                 f"{fmt(pnl.net_fraction if pnl else None, 2, pct=True):>9} "
                 f"{fmt(vol, 4):>8} {fmt(dd, 2, pct=True):>9}"
             )
+            # Sort key: the claim on the pool's XLM leg where there is one, so
+            # rows are comparable across pools. Without a native leg there is no
+            # common denominator, and those rows sort last rather than being
+            # ranked against a number they do not have.
+            if pool.asset_a == "native":
+                key = c.reserve_a
+            elif pool.asset_b == "native":
+                key = c.reserve_b
+            else:
+                key = ZERO
+            built.append((key, line))
             rows += 1
-            if args.limit and rows >= args.limit:
-                break
-        if args.limit and rows >= args.limit:
-            break
+
+    if args.sort == "value":
+        built.sort(key=lambda r: -r[0])
+
+    shown = built if not args.limit else built[: args.limit]
+    for _, line in shown:
+        print(line)
 
     total = stats["with_entry"] + stats["no_entry"]
     if total:
