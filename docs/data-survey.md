@@ -214,10 +214,19 @@ by size at all with what has been ingested. Cross-pool value comparison requires
 an external price source Gauge does not have and has not yet decided to trust.
 
 **`total_trustlines` is not a holder count.** A trustline can exist with a zero
-balance. In the attribution run, 204 of the positions read back had a balance of
-exactly zero — accounts holding a trustline to a pool share asset with no stake
-in it. Every holder-count figure above is therefore an upper bound, and the
-survey uses it as one.
+balance. In the attribution run, **4,834 of 73,500 positions (6.58%)** read back
+with a balance of exactly zero — accounts holding a trustline to a pool-share
+asset with no stake in it. Every holder-count figure in this document is
+therefore an upper bound, and the survey uses it as one.
+
+An earlier draft of this line reported 204, taken from a checkpoint partway
+through the run. That figure was not merely imprecise, it was unrepresentative:
+attribution discovers the heavily diversified accounts first, and those hold
+real positions, so the zero-balance rate climbs as the long tail arrives. A
+partial run is not a small version of a complete one, and this is the second
+time in this survey that a truncated sample gave a confidently wrong answer —
+the first was the 8,000-pool probe. Both are recorded rather than quietly
+corrected.
 
 **Current state carries no entry basis.** A share balance says what a position
 is worth now. It says nothing about what was paid for it, so impermanent loss,
